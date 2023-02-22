@@ -5,6 +5,7 @@ enum MyThemeKeys { LIGHT, DARK }
 class MyThemes {
   static final ThemeData lightTheme = ThemeData(
     primaryColor: const Color(0xfff78e93),
+    scaffoldBackgroundColor: Colors.white,
     appBarTheme: const AppBarTheme(
       color: Color(0xfff8ccd1),
       elevation: 0,

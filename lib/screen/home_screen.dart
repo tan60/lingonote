@@ -41,10 +41,11 @@ class _HomeScreenState extends State<HomeScreen> {
         child: const Icon(Icons.add),
         onPressed: () {},
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: Stack(
         children: [
           Container(
-            height: 80,
+            height: 90,
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(25),
@@ -52,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               boxShadow: [
                 BoxShadow(
-                  blurRadius: 20,
+                  blurRadius: 10,
                   offset: const Offset(2, 2),
                   color: Colors.black.withOpacity(0.2),
                 ),
@@ -82,18 +83,38 @@ class _HomeScreenState extends State<HomeScreen> {
         });
       },
       child: Container(
-        height: 80,
+        height: 90,
         width: MediaQuery.of(context).size.width / 3,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.only(
             topLeft: index == 0 ? const Radius.circular(25) : Radius.zero,
             topRight: index == 2 ? const Radius.circular(25) : Radius.zero,
           ),
-          color: _selectedItemIndex == index ? Colors.green : Colors.white,
+          color: Colors.white,
         ),
-        child: Icon(
-          icon,
-          color: _selectedItemIndex == index ? Colors.black : Colors.grey,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              color: _selectedItemIndex == index ? Colors.black : Colors.grey,
+            ),
+            const SizedBox(
+              height: 11,
+            ),
+            Container(
+              width: 4,
+              height: 4,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color:
+                    _selectedItemIndex == index ? Colors.black : Colors.white,
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            )
+          ],
         ),
       ),
     );
