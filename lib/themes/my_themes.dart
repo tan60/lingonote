@@ -7,7 +7,7 @@ class MyThemes {
     primaryColor: const Color(0xfff78e93),
     scaffoldBackgroundColor: Colors.white,
     appBarTheme: const AppBarTheme(
-      color: Color(0xfff8ccd1),
+      color: Colors.white,
       elevation: 0,
     ),
     textSelectionTheme: const TextSelectionThemeData(
@@ -18,9 +18,9 @@ class MyThemes {
     brightness: Brightness.light,
     highlightColor: Colors.red,
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
-      backgroundColor: Color(0xfff78e93),
-      focusColor: Color(0xfff77777),
-      splashColor: Color(0xfff78e93),
+      backgroundColor: Color(0xFFE7626C),
+      focusColor: Color(0xFFE7626C),
+      splashColor: Color(0xFFE7626C),
     ),
     colorScheme: ColorScheme.fromSwatch()
         .copyWith(secondary: Colors.white)

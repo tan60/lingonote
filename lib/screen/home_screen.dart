@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:lingonote/screen/feed_home_screen.dart';
+import 'package:lingonote/screen/record_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -10,36 +12,58 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedItemIndex = 1;
 
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Index 0: Home',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 1: Business',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 2: School',
-      style: optionStyle,
-    ),
+  final pages = [
+    const FeedHomeScreen(screenName: 'Feed Home Screen'),
+    const RecordScreen(),
+    const FeedHomeScreen(screenName: 'Empty'),
+    const FeedHomeScreen(screenName: 'Inspiration Screen'),
+    const FeedHomeScreen(screenName: 'My Screen'),
   ];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      /* appBar: AppBar(
         title: const Text('title'),
         centerTitle: true,
-      ),
-      body: const Center(
-        child: Text('Body text'),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () {},
+      ), */
+      body: pages[_selectedItemIndex],
+      /* Navigator(
+        onGenerateRoute: (settings) {
+          switch (_selectedItemIndex) {
+            case 0:
+              return MaterialPageRoute(
+                builder: (context) => pageFeedHome,
+              );
+            case 1:
+              return MaterialPageRoute(
+                builder: (context) => pageRecord,
+              );
+            case 3:
+              return MaterialPageRoute(
+                builder: (context) => pageInsfiration,
+              );
+            case 4:
+              return MaterialPageRoute(
+                builder: (context) => pageMy,
+              );
+          }
+          return null;
+        },
+      ), */
+      floatingActionButton: SizedBox(
+        width: 75,
+        height: 75,
+        child: FloatingActionButton(
+          child: const Icon(Icons.create_rounded),
+          onPressed: () {},
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: Stack(
@@ -62,12 +86,11 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Row(
             children: <Widget>[
-              buildNavBarItem(
-                Icons.home,
-                0,
-              ),
-              buildNavBarItem(Icons.phone, 1),
-              buildNavBarItem(Icons.pages, 2),
+              buildNavBarItem(Icons.home_rounded, 0, true),
+              buildNavBarItem(Icons.auto_graph_rounded, 1, true),
+              buildNavBarItem(Icons.pages, 2, false),
+              buildNavBarItem(Icons.format_quote_rounded, 3, true),
+              buildNavBarItem(Icons.people_alt_outlined, 4, true),
             ],
           ),
         ],
@@ -75,47 +98,54 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget buildNavBarItem(IconData icon, int index) {
+  Widget buildNavBarItem(IconData icon, int index, bool enable) {
     return GestureDetector(
       onTap: () {
         setState(() {
-          _selectedItemIndex = index;
+          if (enable) {
+            _selectedItemIndex = index;
+          }
         });
       },
       child: Container(
         height: 90,
-        width: MediaQuery.of(context).size.width / 3,
+        width: MediaQuery.of(context).size.width / 5,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.only(
             topLeft: index == 0 ? const Radius.circular(25) : Radius.zero,
-            topRight: index == 2 ? const Radius.circular(25) : Radius.zero,
+            topRight: index == 4 ? const Radius.circular(25) : Radius.zero,
           ),
           color: Colors.white,
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              icon,
-              color: _selectedItemIndex == index ? Colors.black : Colors.grey,
-            ),
-            const SizedBox(
-              height: 11,
-            ),
-            Container(
-              width: 4,
-              height: 4,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color:
-                    _selectedItemIndex == index ? Colors.black : Colors.white,
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            )
-          ],
-        ),
+        child: enable
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    icon,
+                    color: _selectedItemIndex == index
+                        ? Colors.black
+                        : Colors.grey,
+                  ),
+                  const SizedBox(
+                    height: 11,
+                  ),
+                  Container(
+                    width: 4,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: _selectedItemIndex == index
+                          ? Colors.black
+                          : Colors.white,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  )
+                ],
+              )
+            : Container(),
       ),
     );
   }
