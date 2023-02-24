@@ -10,53 +10,25 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _selectedItemIndex = 1;
+  int _selectedItemIndex = 0;
 
   final pages = [
-    const FeedHomeScreen(screenName: 'Feed Home Screen'),
+    FeedHomeScreen(),
     const RecordScreen(),
-    const FeedHomeScreen(screenName: 'Empty'),
-    const FeedHomeScreen(screenName: 'Inspiration Screen'),
-    const FeedHomeScreen(screenName: 'My Screen'),
+    const RecordScreen(),
+    const RecordScreen(),
+    const RecordScreen(),
   ];
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /* appBar: AppBar(
-        title: const Text('title'),
-        centerTitle: true,
-      ), */
       body: pages[_selectedItemIndex],
-      /* Navigator(
-        onGenerateRoute: (settings) {
-          switch (_selectedItemIndex) {
-            case 0:
-              return MaterialPageRoute(
-                builder: (context) => pageFeedHome,
-              );
-            case 1:
-              return MaterialPageRoute(
-                builder: (context) => pageRecord,
-              );
-            case 3:
-              return MaterialPageRoute(
-                builder: (context) => pageInsfiration,
-              );
-            case 4:
-              return MaterialPageRoute(
-                builder: (context) => pageMy,
-              );
-          }
-          return null;
-        },
-      ), */
       floatingActionButton: SizedBox(
         width: 75,
         height: 75,
@@ -66,35 +38,39 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: Stack(
-        children: [
-          Container(
-            height: 90,
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(25),
-                topRight: Radius.circular(25),
-              ),
-              boxShadow: [
-                BoxShadow(
-                  blurRadius: 10,
-                  offset: const Offset(2, 2),
-                  color: Colors.black.withOpacity(0.2),
-                ),
-              ],
+      bottomNavigationBar: buildBottomNavBar(),
+    );
+  }
+
+  Stack buildBottomNavBar() {
+    return Stack(
+      children: [
+        Container(
+          height: 90,
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(25),
+              topRight: Radius.circular(25),
             ),
-          ),
-          Row(
-            children: <Widget>[
-              buildNavBarItem(Icons.home_rounded, 0, true),
-              buildNavBarItem(Icons.auto_graph_rounded, 1, true),
-              buildNavBarItem(Icons.pages, 2, false),
-              buildNavBarItem(Icons.format_quote_rounded, 3, true),
-              buildNavBarItem(Icons.people_alt_outlined, 4, true),
+            boxShadow: [
+              BoxShadow(
+                blurRadius: 10,
+                offset: const Offset(2, 2),
+                color: Colors.black.withOpacity(0.2),
+              ),
             ],
           ),
-        ],
-      ),
+        ),
+        Row(
+          children: <Widget>[
+            buildNavBarItem(Icons.home_rounded, 0, true),
+            buildNavBarItem(Icons.auto_graph_rounded, 1, true),
+            buildNavBarItem(Icons.pages, 2, false),
+            buildNavBarItem(Icons.format_quote_rounded, 3, true),
+            buildNavBarItem(Icons.people_alt_outlined, 4, true),
+          ],
+        ),
+      ],
     );
   }
 

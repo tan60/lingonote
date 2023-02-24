@@ -1,0 +1,5 @@
+import 'package:lingonote/data/models/note_model.dart';
+
+abstract class ApiBlueprint {
+  Future<List<NoteModel>>? fetchMyNotes();
+}
