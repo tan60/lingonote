@@ -21,8 +21,8 @@ class Note extends StatelessWidget {
           color: Colors.white,
           boxShadow: [
             BoxShadow(
-              blurRadius: 8,
-              offset: const Offset(0, 3),
+              blurRadius: 18,
+              offset: const Offset(0, 12),
               color: Colors.black.withOpacity(0.2),
             ),
           ],

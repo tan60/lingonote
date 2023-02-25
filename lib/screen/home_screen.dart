@@ -63,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         Row(
           children: <Widget>[
-            buildNavBarItem(Icons.home_rounded, 0, true),
+            buildNavBarItem(Icons.dynamic_feed_rounded, 0, true),
             buildNavBarItem(Icons.auto_graph_rounded, 1, true),
             buildNavBarItem(Icons.pages, 2, false),
             buildNavBarItem(Icons.format_quote_rounded, 3, true),

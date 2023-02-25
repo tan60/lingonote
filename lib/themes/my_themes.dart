@@ -16,15 +16,15 @@ class MyThemes {
       selectionHandleColor: Color(0xfff78e93),
     ),
     brightness: Brightness.light,
-    highlightColor: Colors.red,
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
-      backgroundColor: Color(0xFFE7626C),
+      backgroundColor: Color(0xfff78e93),
       focusColor: Color(0xFFE7626C),
       splashColor: Color(0xFFE7626C),
     ),
     colorScheme: ColorScheme.fromSwatch()
         .copyWith(secondary: Colors.white)
         .copyWith(background: Colors.white),
+    fontFamily: 'Pretendard',
   );
 
   static final ThemeData darkTheme = ThemeData(
@@ -36,6 +36,7 @@ class MyThemes {
     colorScheme: ColorScheme.fromSwatch(
       backgroundColor: Colors.black54,
     ),
+    fontFamily: 'Pretendard',
   );
 
   static ThemeData getThemeFromKey(MyThemeKeys themeKey) {

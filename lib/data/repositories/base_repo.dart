@@ -8,6 +8,7 @@ class BaseRepo extends ApiBlueprint {
   late final ApiBlueprint baseService;
   final ApiService _apiService = ApiService();
   final LocalService _localService = LocalService();
+  final MockService _mockService = MockService();
 
   BaseRepo._privateConstructor();
 
@@ -18,8 +19,8 @@ class BaseRepo extends ApiBlueprint {
   }
 
   BaseRepo initRepo() {
-    baseService = MockService();
-    return this;
+    baseService = _mockService; // Mock Service
+    return _instance;
   }
 
   @override
