@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lingonote/data/models/note_model.dart';
 import 'package:lingonote/data/repositories/base_repo.dart';
 import 'package:lingonote/managers/string_manager.dart';
-import 'package:lingonote/widgets/note.dart';
+import 'package:lingonote/widgets/note_widget.dart';
 
 class FeedHomeScreen extends StatelessWidget {
   FeedHomeScreen({
