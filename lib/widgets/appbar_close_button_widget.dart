@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class AppbarCloseButton extends StatelessWidget {
-  const AppbarCloseButton({super.key});
+class AppBarCloseButton extends StatelessWidget {
+  const AppBarCloseButton({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,8 +17,8 @@ class AppbarCloseButton extends StatelessWidget {
           ));
         },
         child: Container(
-          width: 50,
-          height: 50,
+          //width: 50,
+          //height: 50,
           alignment: Alignment.center,
           padding: const EdgeInsets.all(10),
           child: const Icon(

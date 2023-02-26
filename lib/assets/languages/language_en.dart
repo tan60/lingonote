@@ -11,5 +11,8 @@ class LanguageEn extends Languages {
   String get homeFeedAIGuide => 'AI 교정을 통해 오류를 교정하고 더 나은 표현을 익힐 수 있어요.';
 
   @override
+  String get editNoteAppBarTitle => "Let's write in English!";
+
+  @override
   String get tryWriting => '지금 시작해 볼까요?';
 }

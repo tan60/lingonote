@@ -11,5 +11,8 @@ class LanguageKr extends Languages {
   String get homeFeedAIGuide => 'AI 교정으로 더 나은 표현을 익혀보세요.';
 
   @override
+  String get editNoteAppBarTitle => "Let's write in English!";
+
+  @override
   String get tryWriting => '지금 시작해 볼까요?';
 }

@@ -11,5 +11,7 @@ abstract class Languages {
 
   String get homeFeedAIGuide;
 
+  String get editNoteAppBarTitle;
+
   String get tryWriting;
 }

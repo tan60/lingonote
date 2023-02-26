@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:lingonote/managers/string_manager.dart';
 import 'package:lingonote/themes/my_themes.dart';
-import 'package:lingonote/widgets/appbar_close_button_widget.dart';
 import 'package:lingonote/widgets/edit_text_widget.dart';
+import 'package:lingonote/widgets/rounded_icon_button_widget.dart';
 
 class EditNote extends StatefulWidget {
   const EditNote({super.key});
@@ -13,6 +14,8 @@ class EditNote extends StatefulWidget {
 class _EditNoteState extends State<EditNote> with WidgetsBindingObserver {
   late Brightness _brightness;
   late ScrollController _scrollController;
+  bool isPreviewEnable = false;
+  bool isSaveEnable = false;
 
   @override
   void initState() {
@@ -38,35 +41,51 @@ class _EditNoteState extends State<EditNote> with WidgetsBindingObserver {
     super.didChangeDependencies();
   }
 
+  void setPreviewEnable(bool enable) {
+    setState(() {
+      isPreviewEnable = enable;
+    });
+  }
+
+  void setSaveEnable(bool enable) {
+    setState(() {
+      isSaveEnable = enable;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: _brightness == Brightness.light
           ? MyThemes.getThemeFromKey(MyThemeKeys.LIGHT).primaryColor
           : MyThemes.getThemeFromKey(MyThemeKeys.DARK).primaryColor,
+      appBar: AppBar(
+        elevation: 0,
+        toolbarHeight: 82,
+        title: Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            StringMgr().editNoteAppBarTitle,
+            style: const TextStyle(fontSize: 25, color: Colors.white),
+          ),
+        ),
+        leadingWidth: 92, // horizontal 52 + 40
+        leading: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+          child: RoundedIconButton(
+              iconData: Icons.close_rounded,
+              enableColor: null,
+              isEnable: true,
+              onTap: () {}),
+        ),
+      ),
       body: Container(
         padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 60,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                Text(
-                  "Let's write in English.",
-                  style: TextStyle(color: Colors.white, fontSize: 28),
-                ),
-                AppbarCloseButton(),
-              ],
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            SingleChildScrollView(
-              controller: _scrollController,
-              child: Column(
+        child: SingleChildScrollView(
+          controller: _scrollController,
+          child: Column(
+            children: [
+              Column(
                 children: [
                   Container(
                     alignment: Alignment.center,
@@ -78,11 +97,12 @@ class _EditNoteState extends State<EditNote> with WidgetsBindingObserver {
                       color: Colors.white.withOpacity(0.3),
                       borderRadius: BorderRadius.circular(18),
                     ),
-                    child: const EditText(
-                      hintText: 'What is topic of your writing?',
-                      labelText: 'Topic',
+                    child: EditText(
+                      labelText: 'What is topic of your writing?',
+                      hintText: 'Topic',
                       maxLines: 3,
                       gestureTapCallback: null,
+                      onChanged: (string) {},
                     ),
                   ),
                   const SizedBox(
@@ -90,7 +110,7 @@ class _EditNoteState extends State<EditNote> with WidgetsBindingObserver {
                   ),
                   Container(
                     alignment: Alignment.topCenter,
-                    height: 300,
+                    height: 400,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 15,
                       vertical: 6,
@@ -100,20 +120,51 @@ class _EditNoteState extends State<EditNote> with WidgetsBindingObserver {
                       borderRadius: BorderRadius.circular(18),
                     ),
                     child: EditText(
-                      hintText: 'Please write the content.',
-                      labelText: 'Content',
+                      labelText: 'Please write the content.',
+                      hintText: 'Content',
                       maxLines: null,
                       gestureTapCallback: () {
-                        _scrollController.animateTo(
+                        /* _scrollController.animateTo(
                           100.0,
                           duration: const Duration(microseconds: 500),
                           curve: Curves.ease,
-                        );
+                        ); */
+                      },
+                      onChanged: (string) {
+                        setPreviewEnable(string.isNotEmpty);
+                        setSaveEnable(string.isNotEmpty);
                       },
                     ),
                   ),
                 ],
               ),
+            ],
+          ),
+        ),
+      ),
+      floatingActionButton: SizedBox(
+        width: 120,
+        height: 52,
+        child: Row(
+          children: [
+            RoundedIconButton(
+              iconData: Icons.visibility_rounded,
+              isEnable: isPreviewEnable,
+              enableColor: null, //MyThemes.lightTheme.colorScheme.error,
+              onTap: () {
+                setPreviewEnable(false);
+              },
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            RoundedIconButton(
+              iconData: Icons.task_alt_rounded,
+              isEnable: isSaveEnable,
+              enableColor: null, //MyThemes.lightTheme.colorScheme.error,
+              onTap: () {
+                setSaveEnable(false);
+              },
             ),
           ],
         ),

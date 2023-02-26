@@ -37,5 +37,8 @@ class StringMgr extends Languages {
   String get homeFeedAIGuide => localeLanguage.homeFeedAIGuide;
 
   @override
+  String get editNoteAppBarTitle => localeLanguage.editNoteAppBarTitle;
+
+  @override
   String get tryWriting => localeLanguage.tryWriting;
 }
