@@ -5,6 +5,7 @@ class EditText extends StatelessWidget {
   final String labelText, hintText;
   final int? maxLines;
   final GestureTapCallback? gestureTapCallback;
+  final TextEditingController? textEditingController;
   final Function(String string)? onChanged;
 
   const EditText({
@@ -13,12 +14,14 @@ class EditText extends StatelessWidget {
     required this.hintText,
     required this.maxLines,
     required this.gestureTapCallback,
+    required this.textEditingController,
     required this.onChanged,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      controller: textEditingController,
       onTap: gestureTapCallback,
       style: const TextStyle(color: Colors.white, fontSize: 24),
       cursorColor: Colors.white,

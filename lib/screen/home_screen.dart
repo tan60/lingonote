@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:lingonote/data/repositories/database/database_helper.dart';
+import 'package:lingonote/managers/pref_mgr.dart';
+import 'package:lingonote/screen/edit_note_screen.dart';
 import 'package:lingonote/screen/feed_home_screen.dart';
 import 'package:lingonote/screen/record_screen.dart';
 
@@ -20,8 +23,16 @@ class _HomeScreenState extends State<HomeScreen> {
     const RecordScreen(),
   ];
 
+  Future initUid() async {
+    const uid = 1234567890123456;
+    await PrefMgr().prefs.setInt(PrefMgr.uid, uid);
+  }
+
   @override
   void initState() {
+    //initUid();
+
+    DataBaseHelper().openDB();
     super.initState();
   }
 
@@ -34,7 +45,16 @@ class _HomeScreenState extends State<HomeScreen> {
         height: 75,
         child: FloatingActionButton(
           child: const Icon(Icons.create_rounded),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const EditNoteScreen(),
+                fullscreenDialog: true,
+                allowSnapshotting: true,
+              ),
+            );
+          },
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

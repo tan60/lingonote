@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lingonote/data/models/note_model.dart';
 import 'package:lingonote/data/repositories/base_repo.dart';
 import 'package:lingonote/managers/string_manager.dart';
+import 'package:lingonote/screen/edit_note_screen.dart';
 import 'package:lingonote/widgets/note_widget.dart';
 
 class FeedHomeScreen extends StatelessWidget {
@@ -9,7 +10,8 @@ class FeedHomeScreen extends StatelessWidget {
     super.key,
   });
 
-  final Future<List<NoteModel>>? notes = BaseRepo().baseService.fetchMyNotes();
+  Future<List<NoteModel>>? notes = BaseRepo().fetchMyNotes(
+      1234567890123456 /* PrefMgr().prefs.getInt(PrefMgr.uid) ?? -1 */);
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +57,7 @@ class FeedHomeScreen extends StatelessWidget {
       itemBuilder: (context, index) {
         var note = snapshot.data![index];
         return Note(
-          title: note.title,
+          title: note.topic,
           contents: note.contents,
           date: note.issueDate,
         );
@@ -140,9 +142,14 @@ class TryNowButton extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
-          /* ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text('Tap'),
-          )); */
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const EditNoteScreen(),
+              fullscreenDialog: true,
+              allowSnapshotting: true,
+            ),
+          );
         },
         child: Container(
           height: 64,

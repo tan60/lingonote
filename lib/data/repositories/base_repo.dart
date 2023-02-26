@@ -5,29 +5,31 @@ import 'package:lingonote/data/repositories/local_service.dart';
 import 'package:lingonote/data/repositories/mock_service.dart';
 
 class BaseRepo extends ApiBlueprint {
-  late final ApiBlueprint baseService;
   final ApiService _apiService = ApiService();
   final LocalService _localService = LocalService();
   final MockService _mockService = MockService();
+  late ApiBlueprint baseService;
 
-  BaseRepo._privateConstructor();
+  BaseRepo._internal();
 
-  static final BaseRepo _instance = BaseRepo._privateConstructor();
+  static final BaseRepo _singleton = BaseRepo._internal();
 
   factory BaseRepo() {
-    return _instance.initRepo();
+    return _singleton.initRepo();
   }
 
   BaseRepo initRepo() {
     baseService = _mockService; // Mock Service
-    return _instance;
+    return _singleton;
   }
 
   @override
-  Future<List<NoteModel>>? fetchMyNotes() async {
-    return await Future<List<NoteModel>>.delayed(const Duration(seconds: 1),
-        () {
-      return baseService.fetchMyNotes()!;
-    });
+  Future<List<NoteModel>>? fetchMyNotes(int userUid) async {
+    return await _localService.fetchMyNotes(userUid)!;
+  }
+
+  @override
+  Future postNote(NoteModel note) async {
+    return await _localService.postNote(note);
   }
 }

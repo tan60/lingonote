@@ -1,24 +1,32 @@
 class NoteModel {
-  late final String title, contents, issueDate, fixedDate, userId;
-  late final bool isGrammatically, isImproved;
+  late final String topic,
+      contents,
+      issueDate,
+      fixedDate,
+      improved,
+      improvedType;
+  late final int userUid;
   late List<String> tags;
+  late int postNo;
 
-  NoteModel(
-      {required this.title,
-      required this.contents,
-      required this.issueDate,
-      required this.fixedDate,
-      required this.userId,
-      required this.isGrammatically,
-      required this.isImproved});
+  NoteModel({
+    required this.topic,
+    required this.contents,
+    required this.issueDate,
+    required this.fixedDate,
+    required this.improved,
+    required this.improvedType,
+    required this.userUid,
+  });
 
   NoteModel.fromJson(Map<String, dynamic> json)
-      : title = json['title'],
+      : postNo = json['post_no'],
+        topic = json['topic'],
         contents = json['contents'],
-        issueDate = json['issueDate'], //20230227130155
-        fixedDate = json['fixedDate'],
-        userId = json['userId'],
-        isGrammatically = json['isGrammatically'],
-        isImproved = json['isImproved'],
+        issueDate = json['issue_date'], //20230227130155
+        fixedDate = json['fixed_date'],
+        userUid = json['user_uid'],
+        improved = json['improved'],
+        improvedType = json['improve_type'],
         tags = json['tags'].toList();
 }

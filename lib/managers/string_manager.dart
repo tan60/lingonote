@@ -41,4 +41,16 @@ class StringMgr extends Languages {
 
   @override
   String get tryWriting => localeLanguage.tryWriting;
+
+  @override
+  String get editTopicLabel => localeLanguage.editTopicLabel;
+
+  @override
+  String get editTopicHint => localeLanguage.editTopicHint;
+
+  @override
+  String get editContentLabel => localeLanguage.editContentLabel;
+
+  @override
+  String get editContentHint => localeLanguage.editContentHint;
 }
