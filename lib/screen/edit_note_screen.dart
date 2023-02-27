@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lingonote/data/models/note_model.dart';
@@ -9,7 +11,9 @@ import 'package:lingonote/widgets/edit_text_widget.dart';
 import 'package:lingonote/widgets/rounded_icon_button_widget.dart';
 
 class EditNoteScreen extends StatefulWidget {
-  const EditNoteScreen({super.key});
+  const EditNoteScreen({
+    super.key,
+  });
 
   @override
   State<EditNoteScreen> createState() => _EditNoteScreenState();
@@ -38,7 +42,8 @@ class _EditNoteScreenState extends State<EditNoteScreen>
   }
 
   Future getUid() async {
-    userUid = PrefMgr().prefs.getInt(PrefMgr.uid) ?? -1;
+    userUid = PrefMgr.prefs.getInt(PrefMgr.uid) ?? -1;
+    log('uid = $userUid');
   }
 
   @override
@@ -74,6 +79,7 @@ class _EditNoteScreenState extends State<EditNoteScreen>
 
   @override
   Widget build(BuildContext context) {
+    log('EditNoteScreen build');
     return Scaffold(
       backgroundColor: _brightness == Brightness.light
           ? MyThemes.getThemeFromKey(MyThemeKeys.LIGHT).primaryColor
@@ -186,6 +192,7 @@ class _EditNoteScreenState extends State<EditNoteScreen>
               enableColor: null, //MyThemes.lightTheme.colorScheme.error,
               onTap: () {
                 buildAndPostNote();
+                Navigator.pop(context);
               },
             ),
           ],

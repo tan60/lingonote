@@ -5,24 +5,44 @@ import 'package:lingonote/themes/my_themes.dart';
 //import 'package:lingonote/screen/home_screen.dart';
 
 void main() {
-  //initApp();
-  runApp(const App());
+  initApp();
 }
 
-void initApp() {
-  PrefMgr().initPref();
+void initApp() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(App());
 }
 
 class App extends StatelessWidget {
-  const App({super.key});
+  App({super.key}) {
+    _initialize();
+  }
+
+  late final Future<bool> _isInitialized = _initialize();
+
+  Future<bool> _initialize() async {
+    await PrefMgr.initPref();
+    return true;
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: MyThemes.getThemeFromKey(MyThemeKeys.LIGHT),
-      title: 'Welcome to Flutter',
+      title: 'Welcome to LingoNote',
 
-      home: const HomeScreen(),
+      home: FutureBuilder(
+        future: _isInitialized,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return const HomeScreen();
+          } else {
+            return Container(
+              color: Colors.amber,
+            ); //show splash
+          }
+        },
+      ),
       //home: const EditNote(),
     );
   }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:lingonote/data/models/note_model.dart';
 import 'package:lingonote/data/repositories/base_repo.dart';
@@ -5,16 +7,27 @@ import 'package:lingonote/managers/string_manager.dart';
 import 'package:lingonote/screen/edit_note_screen.dart';
 import 'package:lingonote/widgets/note_widget.dart';
 
-class FeedHomeScreen extends StatelessWidget {
-  FeedHomeScreen({
+class FeedHomeScreen extends StatefulWidget {
+  const FeedHomeScreen({
     super.key,
   });
 
+  @override
+  State<FeedHomeScreen> createState() => _FeedHomeScreenState();
+}
+
+class _FeedHomeScreenState extends State<FeedHomeScreen> {
   Future<List<NoteModel>>? notes = BaseRepo().fetchMyNotes(
       1234567890123456 /* PrefMgr().prefs.getInt(PrefMgr.uid) ?? -1 */);
 
+  Future<List<NoteModel>>? fetchNote() {
+    return BaseRepo().fetchMyNotes(
+        1234567890123456 /* PrefMgr().prefs.getInt(PrefMgr.uid) ?? -1 */);
+  }
+
   @override
   Widget build(BuildContext context) {
+    log('FeedHomeScreen build');
     return Container(
       margin: const EdgeInsets.only(
         top: 50,
@@ -149,6 +162,8 @@ class TryNowButton extends StatelessWidget {
               fullscreenDialog: true,
               allowSnapshotting: true,
             ),
+          ).then(
+            (value) {},
           );
         },
         child: Container(

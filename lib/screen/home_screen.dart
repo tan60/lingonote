@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:lingonote/data/repositories/database/database_helper.dart';
 import 'package:lingonote/managers/pref_mgr.dart';
@@ -16,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedItemIndex = 0;
 
   final pages = [
-    FeedHomeScreen(),
+    const FeedHomeScreen(),
     const RecordScreen(),
     const RecordScreen(),
     const RecordScreen(),
@@ -25,12 +27,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future initUid() async {
     const uid = 1234567890123456;
-    await PrefMgr().prefs.setInt(PrefMgr.uid, uid);
+    bool result = await PrefMgr.prefs.setInt(PrefMgr.uid, uid);
+    log('set uid to PrefMgr -- result = $result');
   }
 
   @override
   void initState() {
-    //initUid();
+    initUid();
 
     DataBaseHelper().openDB();
     super.initState();
@@ -38,6 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    log('HomeScreen build');
     return Scaffold(
       body: pages[_selectedItemIndex],
       floatingActionButton: SizedBox(
@@ -53,7 +57,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 fullscreenDialog: true,
                 allowSnapshotting: true,
               ),
-            );
+            ).then((value) {
+              log("return home screen");
+              pages[_selectedItemIndex].createState();
+            });
           },
         ),
       ),
