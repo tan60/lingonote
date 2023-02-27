@@ -8,21 +8,32 @@ import 'package:lingonote/screen/edit_note_screen.dart';
 import 'package:lingonote/widgets/note_widget.dart';
 
 class FeedHomeScreen extends StatefulWidget {
-  const FeedHomeScreen({
+  late _FeedHomeScreenState _feedHomeScreenState;
+
+  FeedHomeScreen({
     super.key,
   });
 
   @override
-  State<FeedHomeScreen> createState() => _FeedHomeScreenState();
+  State<FeedHomeScreen> createState() {
+    _feedHomeScreenState = _FeedHomeScreenState();
+    return _feedHomeScreenState;
+  }
+
+  void refresh() {
+    _feedHomeScreenState.fetchNotes();
+  }
 }
 
 class _FeedHomeScreenState extends State<FeedHomeScreen> {
   Future<List<NoteModel>>? notes = BaseRepo().fetchMyNotes(
       1234567890123456 /* PrefMgr().prefs.getInt(PrefMgr.uid) ?? -1 */);
 
-  Future<List<NoteModel>>? fetchNote() {
-    return BaseRepo().fetchMyNotes(
-        1234567890123456 /* PrefMgr().prefs.getInt(PrefMgr.uid) ?? -1 */);
+  void fetchNotes() {
+    setState(() {
+      notes = BaseRepo().fetchMyNotes(
+          1234567890123456 /* PrefMgr().prefs.getInt(PrefMgr.uid) ?? -1 */);
+    });
   }
 
   @override
@@ -112,7 +123,55 @@ class _FeedHomeScreenState extends State<FeedHomeScreen> {
           const SizedBox(
             height: 16,
           ),
-          const TryNowButton(),
+          Ink(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(22),
+              color: Colors.grey.shade200,
+            ),
+            child: InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EditNoteScreen(
+                      resultCallback: () {
+                        fetchNotes();
+                      },
+                    ),
+                    fullscreenDialog: true,
+                    allowSnapshotting: true,
+                  ),
+                ).then(
+                  (value) {},
+                );
+              },
+              child: Container(
+                height: 64,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 18,
+                ),
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.create_rounded,
+                      color: Colors.black87,
+                    ),
+                    const SizedBox(
+                      width: 14,
+                    ),
+                    Text(
+                      StringMgr().tryWriting,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.black54,
+                        fontWeight: FontWeight.w300,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
           const SizedBox(
             height: 6,
           ),
@@ -158,7 +217,9 @@ class TryNowButton extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const EditNoteScreen(),
+              builder: (context) => EditNoteScreen(
+                resultCallback: () {},
+              ),
               fullscreenDialog: true,
               allowSnapshotting: true,
             ),

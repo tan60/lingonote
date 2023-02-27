@@ -18,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedItemIndex = 0;
 
   final pages = [
-    const FeedHomeScreen(),
+    FeedHomeScreen(),
     const RecordScreen(),
     const RecordScreen(),
     const RecordScreen(),
@@ -53,13 +53,17 @@ class _HomeScreenState extends State<HomeScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const EditNoteScreen(),
+                builder: (context) => EditNoteScreen(
+                  resultCallback: () {},
+                ),
                 fullscreenDialog: true,
                 allowSnapshotting: true,
               ),
             ).then((value) {
               log("return home screen");
-              pages[_selectedItemIndex].createState();
+              FeedHomeScreen feedHome =
+                  pages[_selectedItemIndex] as FeedHomeScreen;
+              feedHome.refresh();
             });
           },
         ),

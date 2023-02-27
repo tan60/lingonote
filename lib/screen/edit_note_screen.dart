@@ -11,8 +11,11 @@ import 'package:lingonote/widgets/edit_text_widget.dart';
 import 'package:lingonote/widgets/rounded_icon_button_widget.dart';
 
 class EditNoteScreen extends StatefulWidget {
+  final Function() resultCallback;
+
   const EditNoteScreen({
     super.key,
+    required this.resultCallback,
   });
 
   @override
@@ -102,6 +105,7 @@ class _EditNoteScreenState extends State<EditNoteScreen>
             enableColor: null,
             isEnable: true,
             onTap: () {
+              widget.resultCallback();
               Navigator.pop(context);
             },
           ),
@@ -192,6 +196,7 @@ class _EditNoteScreenState extends State<EditNoteScreen>
               enableColor: null, //MyThemes.lightTheme.colorScheme.error,
               onTap: () {
                 buildAndPostNote();
+                widget.resultCallback();
                 Navigator.pop(context);
               },
             ),
