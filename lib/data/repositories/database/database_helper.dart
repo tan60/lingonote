@@ -94,8 +94,8 @@ class DataBaseHelper {
 
   Future<List<NoteModel>> getNotes(int userUid) async {
     final db = await openDB();
-    List<Map<String, dynamic>> maps =
-        await db.query('post', where: 'user_uid = ?', whereArgs: [userUid]);
+    List<Map<String, dynamic>> maps = await db.query('post',
+        where: 'user_uid = ?', whereArgs: [userUid], orderBy: 'post_no DESC');
 
     return List.generate(maps.length, (i) {
       return NoteModel(

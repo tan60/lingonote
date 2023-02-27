@@ -11,11 +11,8 @@ import 'package:lingonote/widgets/edit_text_widget.dart';
 import 'package:lingonote/widgets/rounded_icon_button_widget.dart';
 
 class EditNoteScreen extends StatefulWidget {
-  final Function() resultCallback;
-
   const EditNoteScreen({
     super.key,
-    required this.resultCallback,
   });
 
   @override
@@ -82,7 +79,6 @@ class _EditNoteScreenState extends State<EditNoteScreen>
 
   @override
   Widget build(BuildContext context) {
-    log('EditNoteScreen build');
     return Scaffold(
       backgroundColor: _brightness == Brightness.light
           ? MyThemes.getThemeFromKey(MyThemeKeys.LIGHT).primaryColor
@@ -105,7 +101,6 @@ class _EditNoteScreenState extends State<EditNoteScreen>
             enableColor: null,
             isEnable: true,
             onTap: () {
-              widget.resultCallback();
               Navigator.pop(context);
             },
           ),
@@ -195,8 +190,7 @@ class _EditNoteScreenState extends State<EditNoteScreen>
               isEnable: isSaveEnable,
               enableColor: null, //MyThemes.lightTheme.colorScheme.error,
               onTap: () {
-                buildAndPostNote();
-                widget.resultCallback();
+                buildAndPostNote(context);
                 Navigator.pop(context);
               },
             ),
@@ -206,8 +200,7 @@ class _EditNoteScreenState extends State<EditNoteScreen>
     );
   }
 
-  Future<NoteModel>? buildAndPostNote() async {
-    //void buildAndPostNote() {
+  Future<NoteModel>? buildAndPostNote(BuildContext context) async {
     String topic = _topicTextEditingController.text;
     String contents = _contentsTextEditingController.text;
     String improved = "";
@@ -231,7 +224,6 @@ class _EditNoteScreenState extends State<EditNoteScreen>
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text('${resultNote.postNo} 번째 노트가 작성되었습니다.'),
     ));
-    List<NoteModel>? notes = await BaseRepo().fetchMyNotes(userUid);
 
     return resultNote;
   }

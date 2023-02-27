@@ -37,9 +37,7 @@ class App extends StatelessWidget {
           if (snapshot.hasData) {
             return const HomeScreen();
           } else {
-            return Container(
-              color: Colors.amber,
-            ); //show splash
+            return Container(); //show splash
           }
         },
       ),

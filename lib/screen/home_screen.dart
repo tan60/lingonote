@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:lingonote/data/repositories/database/database_helper.dart';
 import 'package:lingonote/managers/pref_mgr.dart';
@@ -15,35 +13,43 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _selectedItemIndex = 0;
+  final GlobalKey<FeedHomeScreenState> _feedHomeWidgetKey = GlobalKey();
+  int _selectedBottomNavIndex = 0;
 
-  final pages = [
-    FeedHomeScreen(),
-    const RecordScreen(),
-    const RecordScreen(),
-    const RecordScreen(),
-    const RecordScreen(),
-  ];
+  late final dynamic pages;
 
-  Future initUid() async {
-    const uid = 1234567890123456;
-    bool result = await PrefMgr.prefs.setInt(PrefMgr.uid, uid);
-    log('set uid to PrefMgr -- result = $result');
+  Future fetchUid() async {
+    const uid = 1234567890123456; //for test
+    await PrefMgr.prefs.setInt(PrefMgr.uid, uid);
+  }
+
+  Future openDatabase() async {
+    await DataBaseHelper().openDB();
+  }
+
+  void buildPages() {
+    pages = [
+      FeedHomeScreen(key: _feedHomeWidgetKey),
+      const RecordScreen(),
+      const RecordScreen(),
+      const RecordScreen(),
+      const RecordScreen(),
+    ];
   }
 
   @override
   void initState() {
-    initUid();
+    fetchUid();
+    openDatabase();
+    buildPages();
 
-    DataBaseHelper().openDB();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    log('HomeScreen build');
     return Scaffold(
-      body: pages[_selectedItemIndex],
+      body: pages[_selectedBottomNavIndex],
       floatingActionButton: SizedBox(
         width: 75,
         height: 75,
@@ -53,17 +59,12 @@ class _HomeScreenState extends State<HomeScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => EditNoteScreen(
-                  resultCallback: () {},
-                ),
+                builder: (context) => const EditNoteScreen(),
                 fullscreenDialog: true,
                 allowSnapshotting: true,
               ),
             ).then((value) {
-              log("return home screen");
-              FeedHomeScreen feedHome =
-                  pages[_selectedItemIndex] as FeedHomeScreen;
-              feedHome.refresh();
+              _feedHomeWidgetKey.currentState?.fetchNotes();
             });
           },
         ),
@@ -110,7 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
       onTap: () {
         setState(() {
           if (enable) {
-            _selectedItemIndex = index;
+            _selectedBottomNavIndex = index;
           }
         });
       },
@@ -130,7 +131,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Icon(
                     icon,
-                    color: _selectedItemIndex == index
+                    color: _selectedBottomNavIndex == index
                         ? Colors.black
                         : Colors.grey,
                   ),
@@ -142,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: 4,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: _selectedItemIndex == index
+                      color: _selectedBottomNavIndex == index
                           ? Colors.black
                           : Colors.white,
                     ),

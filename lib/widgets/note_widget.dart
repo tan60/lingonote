@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 class Note extends StatelessWidget {
-  final title, contents, date;
-  const Note({
-    super.key,
-    required this.title,
-    required this.contents,
-    required this.date,
-  });
+  final String title, contents, date, improvedType;
+  const Note(
+      {super.key,
+      required this.title,
+      required this.contents,
+      required this.date,
+      required this.improvedType});
 
   @override
   Widget build(BuildContext context) {
@@ -55,14 +55,15 @@ class Note extends StatelessWidget {
             const SizedBox(
               height: 12,
             ),
-            Container(
-                child: Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text('A.I Improved'),
+                improvedType != 'none'
+                    ? const Text('A.I Improved')
+                    : const Text(''),
                 Text(date),
               ],
-            )),
+            ),
           ],
         ),
       ),
