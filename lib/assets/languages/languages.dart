@@ -22,4 +22,12 @@ abstract class Languages {
   String get editContentLabel;
 
   String get editContentHint;
+
+  String get correctedByAI;
+
+  String get close;
+
+  String get showCorrectedNote;
+
+  String get showOriginalNote;
 }

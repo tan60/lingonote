@@ -14,6 +14,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<FeedHomeScreenState> _feedHomeWidgetKey = GlobalKey();
+  final double _bottomNavigationBarHeight = 80;
   int _selectedBottomNavIndex = 0;
 
   late final dynamic pages;
@@ -78,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Stack(
       children: [
         Container(
-          height: 90,
+          height: _bottomNavigationBarHeight,
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(25),
@@ -116,14 +117,14 @@ class _HomeScreenState extends State<HomeScreen> {
         });
       },
       child: Container(
-        height: 90,
+        height: _bottomNavigationBarHeight,
         width: MediaQuery.of(context).size.width / 5,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.only(
             topLeft: index == 0 ? const Radius.circular(25) : Radius.zero,
             topRight: index == 4 ? const Radius.circular(25) : Radius.zero,
           ),
-          color: Colors.white,
+          color: Theme.of(context).scaffoldBackgroundColor,
         ),
         child: enable
             ? Column(
@@ -132,8 +133,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   Icon(
                     icon,
                     color: _selectedBottomNavIndex == index
-                        ? Colors.black
-                        : Colors.grey,
+                        ? Theme.of(context).focusColor
+                        : Theme.of(context).disabledColor,
                   ),
                   const SizedBox(
                     height: 11,
@@ -144,8 +145,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: _selectedBottomNavIndex == index
-                          ? Colors.black
-                          : Colors.white,
+                          ? Theme.of(context).focusColor
+                          : null,
                     ),
                   ),
                   const SizedBox(

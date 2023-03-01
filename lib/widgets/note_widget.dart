@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lingonote/managers/string_mgr.dart';
 
 class Note extends StatelessWidget {
   final String title, contents, date, improvedType;
@@ -18,7 +19,7 @@ class Note extends StatelessWidget {
         padding: const EdgeInsets.all(30),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
-          color: Colors.white,
+          color: Theme.of(context).cardColor,
           boxShadow: [
             BoxShadow(
               blurRadius: 18,
@@ -33,10 +34,11 @@ class Note extends StatelessWidget {
             Text(
               title,
               maxLines: 2,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.w800,
                 letterSpacing: 0.3,
+                color: Theme.of(context).textTheme.displayLarge?.color,
               ),
             ),
             const SizedBox(
@@ -46,10 +48,11 @@ class Note extends StatelessWidget {
               contents,
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 19,
                 fontWeight: FontWeight.w600,
                 letterSpacing: 0.3,
+                color: Theme.of(context).textTheme.displayLarge?.color,
               ),
             ),
             const SizedBox(
@@ -59,9 +62,18 @@ class Note extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 improvedType != 'none'
-                    ? const Text('A.I Improved')
+                    ? Text(
+                        StringMgr().correctedByAI,
+                        style: TextStyle(
+                            color: Theme.of(context).primaryColorDark),
+                      )
                     : const Text(''),
-                Text(date),
+                Text(
+                  date,
+                  style: TextStyle(
+                    color: Theme.of(context).textTheme.displayLarge?.color,
+                  ),
+                ),
               ],
             ),
           ],

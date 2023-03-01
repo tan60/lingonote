@@ -1,13 +1,12 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lingonote/data/models/note_model.dart';
 import 'package:lingonote/data/repositories/base_repo.dart';
 import 'package:lingonote/managers/pref_mgr.dart';
-import 'package:lingonote/managers/string_manager.dart';
+import 'package:lingonote/managers/string_mgr.dart';
 import 'package:lingonote/themes/my_themes.dart';
 import 'package:lingonote/widgets/edit_text_widget.dart';
+import 'package:lingonote/widgets/preview_dialog_widget.dart';
 import 'package:lingonote/widgets/rounded_icon_button_widget.dart';
 
 class EditNoteScreen extends StatefulWidget {
@@ -26,8 +25,9 @@ class _EditNoteScreenState extends State<EditNoteScreen>
   late ScrollController _scrollController;
   late TextEditingController _topicTextEditingController;
   late TextEditingController _contentsTextEditingController;
-  bool isPreviewEnable = false;
-  bool isSaveEnable = false;
+  bool _isPreviewEnable = false;
+  bool _isSaveEnable = false;
+  bool _isPosting = false;
 
   @override
   void initState() {
@@ -43,7 +43,6 @@ class _EditNoteScreenState extends State<EditNoteScreen>
 
   Future getUid() async {
     userUid = PrefMgr.prefs.getInt(PrefMgr.uid) ?? -1;
-    log('uid = $userUid');
   }
 
   @override
@@ -65,46 +64,79 @@ class _EditNoteScreenState extends State<EditNoteScreen>
     super.didChangeDependencies();
   }
 
-  void setPreviewEnable(bool enable) {
+  void _setPreviewEnable(bool enable) {
     setState(() {
-      isPreviewEnable = enable;
+      _isPreviewEnable = enable;
     });
   }
 
-  void setSaveEnable(bool enable) {
+  void _setSaveEnable(bool enable) {
     setState(() {
-      isSaveEnable = enable;
+      _isSaveEnable = enable;
     });
+  }
+
+  void _setPostingState(bool isPosting) {
+    setState(() {
+      _isPosting = isPosting;
+    });
+  }
+
+  void _showPostingResultAndPop(NoteModel? note) {
+    _setPostingState(false);
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text('${note?.postNo} 번째 노트가 작성되었습니다.'),
+    ));
+    Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: _brightness == Brightness.light
-          ? MyThemes.getThemeFromKey(MyThemeKeys.LIGHT).primaryColor
-          : MyThemes.getThemeFromKey(MyThemeKeys.DARK).primaryColor,
+          ? MyThemes.getThemeFromKey(MyThemeKeys.light).primaryColor
+          : MyThemes.getThemeFromKey(MyThemeKeys.dark).canvasColor,
       appBar: AppBar(
         elevation: 0,
         toolbarHeight: 82,
-        title: Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            StringMgr().editNoteAppBarTitle,
-            style: const TextStyle(fontSize: 25, color: Colors.white),
+        title: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              StringMgr().editNoteAppBarTitle,
+              style: const TextStyle(fontSize: 25, color: Colors.white),
+            ),
           ),
         ),
         leadingWidth: 92, // horizontal 52 + 40
-        leading: Padding(
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+            child: RoundedIconButton(
+              iconData: Icons.close_rounded,
+              enableColor: null,
+              isEnable: true,
+              isLoading: false,
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+          ),
+        ],
+        automaticallyImplyLeading: false,
+        /* leading: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
           child: RoundedIconButton(
             iconData: Icons.close_rounded,
             enableColor: null,
             isEnable: true,
+            isLoading: false,
             onTap: () {
               Navigator.pop(context);
             },
           ),
-        ),
+        ), */
       ),
       body: Container(
         padding: const EdgeInsets.all(20),
@@ -160,8 +192,8 @@ class _EditNoteScreenState extends State<EditNoteScreen>
                       },
                       textEditingController: _contentsTextEditingController,
                       onChanged: (string) {
-                        setPreviewEnable(string.isNotEmpty);
-                        setSaveEnable(string.isNotEmpty);
+                        _setPreviewEnable(string.isNotEmpty);
+                        _setSaveEnable(string.isNotEmpty);
                       },
                     ),
                   ),
@@ -178,20 +210,26 @@ class _EditNoteScreenState extends State<EditNoteScreen>
           children: [
             RoundedIconButton(
               iconData: Icons.visibility_rounded,
-              isEnable: isPreviewEnable,
-              enableColor: null, //MyThemes.lightTheme.colorScheme.error,
-              onTap: () {},
+              isEnable: _isPreviewEnable,
+              isLoading: false,
+              enableColor: null,
+              onTap: () {
+                _showPreviewDialog(_buildNote());
+              },
             ),
             const SizedBox(
               width: 10,
             ),
             RoundedIconButton(
               iconData: Icons.task_alt_rounded,
-              isEnable: isSaveEnable,
-              enableColor: null, //MyThemes.lightTheme.colorScheme.error,
-              onTap: () {
-                buildAndPostNote(context);
-                Navigator.pop(context);
+              isEnable: _isSaveEnable,
+              isLoading: _isPosting,
+              enableColor: null,
+              onTap: () async {
+                _setPostingState(true);
+                _showPostingResultAndPop(
+                    await _postNote(context, _buildNote()));
+                /* Future.delayed(const Duration(milliseconds: 2000), () {); */
               },
             ),
           ],
@@ -200,7 +238,7 @@ class _EditNoteScreenState extends State<EditNoteScreen>
     );
   }
 
-  Future<NoteModel>? buildAndPostNote(BuildContext context) async {
+  NoteModel _buildNote() {
     String topic = _topicTextEditingController.text;
     String contents = _contentsTextEditingController.text;
     String improved = "";
@@ -209,7 +247,7 @@ class _EditNoteScreenState extends State<EditNoteScreen>
     String issueDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
     String fixedData = issueDate;
 
-    NoteModel note = NoteModel(
+    return NoteModel(
       topic: topic,
       contents: contents,
       issueDate: issueDate,
@@ -218,13 +256,19 @@ class _EditNoteScreenState extends State<EditNoteScreen>
       improved: improved,
       improvedType: improvedType,
     );
+  }
 
+  Future<NoteModel>? _postNote(BuildContext context, NoteModel note) async {
     NoteModel resultNote = await BaseRepo().postNote(note);
-
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text('${resultNote.postNo} 번째 노트가 작성되었습니다.'),
-    ));
-
     return resultNote;
+  }
+
+  Future<void> _showPreviewDialog(NoteModel note) async {
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return PreviewDialogWidget(note: note);
+      },
+    );
   }
 }

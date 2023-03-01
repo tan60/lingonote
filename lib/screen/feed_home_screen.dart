@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lingonote/data/models/note_model.dart';
 import 'package:lingonote/data/repositories/base_repo.dart';
-import 'package:lingonote/managers/string_manager.dart';
+import 'package:lingonote/managers/string_mgr.dart';
 import 'package:lingonote/screen/edit_note_screen.dart';
 import 'package:lingonote/widgets/note_widget.dart';
 
@@ -69,8 +69,7 @@ class FeedHomeScreenState extends State<FeedHomeScreen> {
       itemBuilder: (context, index) {
         var note = snapshot.data![index];
         DateTime issueServerTime = DateTime.parse(note.issueDate);
-        String formattedTime =
-            DateFormat('yyyy.MM.dd HH:mm').format(issueServerTime);
+        String formattedTime = DateFormat('yyyy.MM.dd').format(issueServerTime);
 
         return Note(
           title: note.topic,

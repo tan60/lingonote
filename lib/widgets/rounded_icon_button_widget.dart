@@ -3,19 +3,21 @@ import 'package:flutter/material.dart';
 class RoundedIconButton extends StatelessWidget {
   final IconData iconData;
   final Function()? onTap;
-  bool isEnable;
   final Color? enableColor;
+  final bool isEnable;
+  final bool isLoading;
 
-  RoundedIconButton({
+  const RoundedIconButton({
     super.key,
     required this.iconData,
     required this.onTap,
     required this.isEnable,
+    required this.isLoading,
     required this.enableColor,
   });
 
-  void setEnable(bool enable) {
-    isEnable = isEnable;
+  void setLoading(bool isLoading) {
+    isLoading = isLoading;
   }
 
   @override
@@ -30,13 +32,26 @@ class RoundedIconButton extends StatelessWidget {
         child: Container(
           alignment: Alignment.center,
           padding: const EdgeInsets.all(10),
-          child: Icon(
-            iconData,
-            color: isEnable
-                ? (enableColor ?? Colors.white)
-                : Colors.white.withOpacity(0.3),
-            size: 32,
-          ),
+          child: isLoading
+              ? SizedBox(
+                  width: 32,
+                  height: 32,
+                  child: CircularProgressIndicator(
+                    color: Colors.white.withOpacity(0.5),
+                    strokeWidth: 4,
+                  ),
+                )
+              : SizedBox(
+                  width: 32,
+                  height: 32,
+                  child: Icon(
+                    iconData,
+                    color: isEnable
+                        ? (enableColor ?? Colors.white)
+                        : Colors.white.withOpacity(0.3),
+                    size: 32,
+                  ),
+                ),
         ),
       ),
     );

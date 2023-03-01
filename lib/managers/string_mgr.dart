@@ -53,4 +53,16 @@ class StringMgr extends Languages {
 
   @override
   String get editContentHint => localeLanguage.editContentHint;
+
+  @override
+  String get correctedByAI => localeLanguage.correctedByAI;
+
+  @override
+  String get close => localeLanguage.close;
+
+  @override
+  String get showCorrectedNote => localeLanguage.showCorrectedNote;
+
+  @override
+  String get showOriginalNote => localeLanguage.showOriginalNote;
 }

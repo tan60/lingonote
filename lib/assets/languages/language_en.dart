@@ -27,4 +27,16 @@ class LanguageEn extends Languages {
 
   @override
   String get editContentHint => "Content";
+
+  @override
+  String get correctedByAI => "corrected by AI";
+
+  @override
+  String get close => "Close";
+
+  @override
+  String get showCorrectedNote => "AI Corrected";
+
+  @override
+  String get showOriginalNote => "Original";
 }

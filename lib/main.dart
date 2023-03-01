@@ -13,12 +13,19 @@ void initApp() async {
   runApp(App());
 }
 
-class App extends StatelessWidget {
+class App extends StatefulWidget {
   App({super.key}) {
-    _initialize();
+    //_initialize();
   }
 
+  @override
+  State<App> createState() => _AppState();
+}
+
+class _AppState extends State<App> with WidgetsBindingObserver {
   late final Future<bool> _isInitialized = _initialize();
+
+  late Brightness _brightness;
 
   Future<bool> _initialize() async {
     await PrefMgr.initPref();
@@ -26,9 +33,35 @@ class App extends StatelessWidget {
   }
 
   @override
+  void initState() {
+    _initialize();
+    WidgetsBinding.instance.addObserver(this);
+    _brightness = WidgetsBinding.instance.window.platformBrightness;
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (mounted) {
+      setState(() {
+        _brightness = WidgetsBinding.instance.window.platformBrightness;
+      });
+    }
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: MyThemes.getThemeFromKey(MyThemeKeys.LIGHT),
+      theme: _brightness == Brightness.light
+          ? MyThemes.getThemeFromKey(MyThemeKeys.light)
+          : MyThemes.getThemeFromKey(MyThemeKeys.dark),
       title: 'Welcome to LingoNote',
 
       home: FutureBuilder(
