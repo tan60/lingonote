@@ -18,7 +18,10 @@ class PreviewDialogWidget extends StatelessWidget {
 
     return Dialog(
       backgroundColor: Colors.transparent,
-      insetPadding: const EdgeInsets.all(10),
+      insetPadding: const EdgeInsets.symmetric(
+        horizontal: 10,
+        vertical: 5,
+      ),
       child: Stack(
         clipBehavior: Clip.none,
         alignment: Alignment.topLeft,
@@ -30,18 +33,13 @@ class PreviewDialogWidget extends StatelessWidget {
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
                 color: Theme.of(context).dialogBackgroundColor),
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.fromLTRB(15, 15, 15, 50),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text(
-                      '',
-                      style: TextStyle(
-                          fontSize: 16, color: Theme.of(context).disabledColor),
-                    ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       child: SizedBox(
@@ -49,7 +47,7 @@ class PreviewDialogWidget extends StatelessWidget {
                         height: 32,
                         child: IconButton(
                           icon: const Icon(Icons.close_rounded),
-                          color: Theme.of(context).dividerColor,
+                          color: Theme.of(context).focusColor,
                           iconSize: 32,
                           onPressed: () {
                             Navigator.pop(context);
@@ -75,7 +73,7 @@ class PreviewDialogWidget extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(
-                  height: 10,
+                  height: 15,
                 ),
                 SizedBox(
                   width: double.infinity,

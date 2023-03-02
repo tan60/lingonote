@@ -97,9 +97,10 @@ class FeedHomeScreenState extends State<FeedHomeScreen> {
           ),
           Text(
             StringMgr().homeFeedSubGuide,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 34,
               fontWeight: FontWeight.w200,
+              color: Theme.of(context).textTheme.displayLarge?.color,
             ),
           ),
           const SizedBox(
@@ -107,9 +108,10 @@ class FeedHomeScreenState extends State<FeedHomeScreen> {
           ),
           Text(
             StringMgr().homeFeedGuide,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 50,
               fontWeight: FontWeight.w400,
+              color: Theme.of(context).textTheme.displayLarge?.color,
             ),
           ),
           const SizedBox(
@@ -117,7 +119,7 @@ class FeedHomeScreenState extends State<FeedHomeScreen> {
           ),
           buildTryNowButton(context),
           const SizedBox(
-            height: 6,
+            height: 10,
           ),
           Container(
             padding: const EdgeInsets.only(
@@ -128,10 +130,10 @@ class FeedHomeScreenState extends State<FeedHomeScreen> {
               children: [
                 Text(
                   StringMgr().homeFeedAIGuide,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 13,
-                    color: Colors.black87,
-                    //color: MyThemes.lightTheme.primaryColor,
+                    //color: Theme.of(context).textTheme.displayLarge?.color,
+                    color: Theme.of(context).primaryColor,
                     fontWeight: FontWeight.w300,
                   ),
                 ),
@@ -147,7 +149,7 @@ class FeedHomeScreenState extends State<FeedHomeScreen> {
     return Ink(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(22),
-        color: Colors.grey.shade200,
+        color: const Color(0xFFEEEEEE),
       ),
       child: InkWell(
         onTap: () {
@@ -182,7 +184,7 @@ class FeedHomeScreenState extends State<FeedHomeScreen> {
                 StringMgr().tryWriting,
                 style: const TextStyle(
                   fontSize: 16,
-                  color: Colors.black54,
+                  color: Colors.black,
                   fontWeight: FontWeight.w300,
                 ),
               ),
