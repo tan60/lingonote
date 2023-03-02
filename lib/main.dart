@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lingonote/managers/pref_mgr.dart';
 import 'package:lingonote/screen/home_screen.dart';
 import 'package:lingonote/themes/my_themes.dart';
+import 'package:sizer/sizer.dart';
 //import 'package:lingonote/screen/home_screen.dart';
 
 void main() {
@@ -58,23 +59,26 @@ class _AppState extends State<App> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: _brightness == Brightness.light
-          ? MyThemes.getThemeFromKey(MyThemeKeys.light)
-          : MyThemes.getThemeFromKey(MyThemeKeys.dark),
-      title: 'Welcome to LingoNote',
-
-      home: FutureBuilder(
-        future: _isInitialized,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return const HomeScreen();
-          } else {
-            return Container(); //show splash
-          }
-        },
-      ),
-      //home: const EditNote(),
+    return Sizer(
+      builder: (context, orientation, deviceType) {
+        return MaterialApp(
+          theme: _brightness == Brightness.light
+              ? MyThemes.getThemeFromKey(MyThemeKeys.light)
+              : MyThemes.getThemeFromKey(MyThemeKeys.dark),
+          title: 'Welcome to LingoNote',
+          home: FutureBuilder(
+            future: _isInitialized,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return const HomeScreen();
+              } else {
+                return Container(); //show splash
+              }
+            },
+          ),
+          //home: const EditNote(),
+        );
+      },
     );
   }
 }

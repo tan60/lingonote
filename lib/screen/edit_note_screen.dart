@@ -8,6 +8,7 @@ import 'package:lingonote/themes/my_themes.dart';
 import 'package:lingonote/widgets/edit_text_widget.dart';
 import 'package:lingonote/widgets/preview_dialog_widget.dart';
 import 'package:lingonote/widgets/rounded_icon_button_widget.dart';
+import 'package:sizer/sizer.dart';
 
 class EditNoteScreen extends StatefulWidget {
   const EditNoteScreen({
@@ -105,7 +106,7 @@ class _EditNoteScreenState extends State<EditNoteScreen>
             alignment: Alignment.centerLeft,
             child: Text(
               StringMgr().editNoteAppBarTitle,
-              style: const TextStyle(fontSize: 25, color: Colors.white),
+              style: TextStyle(fontSize: 18.sp, color: Colors.white),
             ),
           ),
         ),
