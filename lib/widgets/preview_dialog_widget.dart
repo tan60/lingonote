@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lingonote/data/models/note_model.dart';
 import 'package:lingonote/managers/string_mgr.dart';
+import 'package:sizer/sizer.dart';
 
 class PreviewDialogWidget extends StatelessWidget {
   final NoteModel note;
@@ -55,21 +56,6 @@ class PreviewDialogWidget extends StatelessWidget {
                         ),
                       ),
                     ),
-                    /* TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      style: ButtonStyle(
-                          overlayColor: MaterialStateProperty.all(
-                              Theme.of(context).highlightColor)),
-                      child: Text(
-                        StringMgr().close,
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Theme.of(context).disabledColor,
-                        ),
-                      ),
-                    ), */
                   ],
                 ),
                 const SizedBox(
@@ -80,7 +66,7 @@ class PreviewDialogWidget extends StatelessWidget {
                   child: Text(
                     note.topic,
                     style: TextStyle(
-                        fontSize: 26,
+                        fontSize: 22.sp,
                         fontWeight: FontWeight.w500,
                         color: Theme.of(context).textTheme.displayLarge?.color),
                   ),
@@ -94,7 +80,7 @@ class PreviewDialogWidget extends StatelessWidget {
                     Text(
                       isCorrected ? StringMgr().showCorrectedNote : "",
                       style: TextStyle(
-                        fontSize: 15,
+                        fontSize: 10.sp,
                         color: isCorrected
                             ? Theme.of(context).primaryColor
                             : Theme.of(context).disabledColor,
@@ -103,7 +89,8 @@ class PreviewDialogWidget extends StatelessWidget {
                     Text(
                       formattedTime,
                       style: TextStyle(
-                          fontSize: 15, color: Theme.of(context).disabledColor),
+                          fontSize: 10.sp,
+                          color: Theme.of(context).disabledColor),
                     ),
                   ],
                 ),
@@ -123,7 +110,7 @@ class PreviewDialogWidget extends StatelessWidget {
                             child: Text(
                               note.contents,
                               style: TextStyle(
-                                  fontSize: 24,
+                                  fontSize: 18.sp,
                                   fontWeight: FontWeight.w300,
                                   color: Theme.of(context)
                                       .textTheme

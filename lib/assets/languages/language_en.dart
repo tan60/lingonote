@@ -29,7 +29,7 @@ class LanguageEn extends Languages {
   String get editContentHint => "Content";
 
   @override
-  String get correctedByAI => "corrected by AI";
+  String get correctedByAI => "AI Corrected";
 
   @override
   String get close => "Close";

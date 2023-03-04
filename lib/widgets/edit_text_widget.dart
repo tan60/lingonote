@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:sizer/sizer.dart';
 
 class EditText extends StatelessWidget {
   final String labelText, hintText;
@@ -23,7 +24,10 @@ class EditText extends StatelessWidget {
     return TextField(
       controller: textEditingController,
       onTap: gestureTapCallback,
-      style: const TextStyle(color: Colors.white, fontSize: 24),
+      style: TextStyle(
+        color: Colors.white,
+        fontSize: 16.sp,
+      ),
       cursorColor: Colors.white,
       keyboardType: TextInputType.multiline,
       inputFormatters: [

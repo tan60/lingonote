@@ -106,7 +106,10 @@ class _EditNoteScreenState extends State<EditNoteScreen>
             alignment: Alignment.centerLeft,
             child: Text(
               StringMgr().editNoteAppBarTitle,
-              style: TextStyle(fontSize: 18.sp, color: Colors.white),
+              style: TextStyle(
+                fontSize: 18.sp,
+                color: Colors.white,
+              ),
             ),
           ),
         ),

@@ -5,6 +5,7 @@ import 'package:lingonote/data/repositories/base_repo.dart';
 import 'package:lingonote/managers/string_mgr.dart';
 import 'package:lingonote/screen/edit_note_screen.dart';
 import 'package:lingonote/widgets/note_widget.dart';
+import 'package:sizer/sizer.dart';
 
 class FeedHomeScreen extends StatefulWidget {
   @override
@@ -98,7 +99,7 @@ class FeedHomeScreenState extends State<FeedHomeScreen> {
           Text(
             StringMgr().homeFeedSubGuide,
             style: TextStyle(
-              fontSize: 34,
+              fontSize: 22.sp,
               fontWeight: FontWeight.w200,
               color: Theme.of(context).textTheme.displayLarge?.color,
             ),
@@ -109,7 +110,7 @@ class FeedHomeScreenState extends State<FeedHomeScreen> {
           Text(
             StringMgr().homeFeedGuide,
             style: TextStyle(
-              fontSize: 50,
+              fontSize: 36.sp,
               fontWeight: FontWeight.w400,
               color: Theme.of(context).textTheme.displayLarge?.color,
             ),
@@ -131,7 +132,7 @@ class FeedHomeScreenState extends State<FeedHomeScreen> {
                 Text(
                   StringMgr().homeFeedAIGuide,
                   style: TextStyle(
-                    fontSize: 13,
+                    fontSize: 11.sp,
                     //color: Theme.of(context).textTheme.displayLarge?.color,
                     color: Theme.of(context).primaryColor,
                     fontWeight: FontWeight.w300,
@@ -182,8 +183,8 @@ class FeedHomeScreenState extends State<FeedHomeScreen> {
               ),
               Text(
                 StringMgr().tryWriting,
-                style: const TextStyle(
-                  fontSize: 16,
+                style: TextStyle(
+                  fontSize: 12.sp,
                   color: Colors.black,
                   fontWeight: FontWeight.w300,
                 ),
