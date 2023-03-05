@@ -14,7 +14,75 @@ class RecordScreen extends StatefulWidget {
 class _RecordScreenState extends State<RecordScreen> {
   @override
   Widget build(BuildContext context) {
-    return const CalendarUI();
+    return Container(
+      padding: const EdgeInsets.all(0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(
+            height: 80,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Ink(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).disabledColor.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(18),
+                  ),
+                  child: InkWell(
+                    onTap: () {},
+                    child: Container(
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.all(10),
+                      child: const SizedBox(
+                        width: 32,
+                        height: 32,
+                        child: Icon(
+                          Icons.settings_rounded,
+                          color: Colors.white,
+                          size: 32,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            flex: 30,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Your',
+                    style: TextStyle(
+                        fontSize: 24.sp,
+                        color: Theme.of(context).textTheme.displayLarge?.color),
+                  ),
+                  Text(
+                    'Statistics',
+                    style: TextStyle(
+                        fontSize: 24.sp,
+                        fontWeight: FontWeight.w600,
+                        color: Theme.of(context).textTheme.displayLarge?.color),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const Expanded(
+            flex: 70,
+            child: CalendarUI(),
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -38,7 +106,22 @@ class CalendarUI extends StatelessWidget {
       'Saturday': 6,
     };
 
-    int weekday = weekDayMap[endDateWeekday]; //DateTime.now().weekday + 1;
+    Map monthMap = {
+      1: 'Jan',
+      2: 'Feb',
+      3: 'Mar',
+      4: 'Apr',
+      5: 'May',
+      6: 'Jun',
+      7: 'Jul',
+      8: 'Aug',
+      9: 'Sep',
+      10: 'Oct',
+      11: 'Nov',
+      12: 'Dec',
+    };
+
+    int weekday = weekDayMap[endDateWeekday];
 
     getDaysInBetween() {
       final int difference =
@@ -54,14 +137,14 @@ class CalendarUI extends StatelessWidget {
 
     var newList = items.toList();
 
-    double weeksCount = (items.length + weekday) / 7;
+    int weeksCount = ((items.length + weekday) / 7).ceil();
 
     getDaysInBetween();
 
     int indexIgnoreCount = 0;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 60),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 60),
       child: SizedBox(
         height: 300,
         child: Row(
@@ -71,83 +154,40 @@ class CalendarUI extends StatelessWidget {
                 minHeight: 20,
               ),
               child: Column(
-                // crossAxisAlignment: ,
-                /* mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween, */
-                children: [
-                  const Spacer(flex: 1),
-                  Text(
-                    '',
-                    style: TextStyle(
-                        fontSize: 7.sp,
-                        color: Theme.of(context).textTheme.displayLarge?.color),
-                  ),
-                  const Spacer(flex: 2),
-                  Text(
-                    'Sun',
-                    style: TextStyle(
-                        fontSize: 7.sp,
-                        color: Theme.of(context).textTheme.displayLarge?.color),
-                  ),
-                  const Spacer(flex: 2),
-                  Text(
-                    'Mon',
-                    style: TextStyle(
-                        fontSize: 7.sp,
-                        color: Theme.of(context).textTheme.displayLarge?.color),
-                  ),
-                  const Spacer(flex: 2),
-                  Text(
-                    'Tue',
-                    style: TextStyle(
-                        fontSize: 7.sp,
-                        color: Theme.of(context).textTheme.displayLarge?.color),
-                  ),
-                  const Spacer(flex: 2),
-                  Text(
-                    'Wed',
-                    style: TextStyle(
-                        fontSize: 7.sp,
-                        color: Theme.of(context).textTheme.displayLarge?.color),
-                  ),
-                  const Spacer(flex: 2),
-                  Text(
-                    'Thu',
-                    style: TextStyle(
-                        fontSize: 7.sp,
-                        color: Theme.of(context).textTheme.displayLarge?.color),
-                  ),
-                  const Spacer(flex: 2),
-                  Text(
-                    'Fri',
-                    style: TextStyle(
-                        fontSize: 7.sp,
-                        color: Theme.of(context).textTheme.displayLarge?.color),
-                  ),
-                  const Spacer(flex: 2),
-                  Text(
-                    'Sat',
-                    style: TextStyle(
-                        fontSize: 7.sp,
-                        color: Theme.of(context).textTheme.displayLarge?.color),
-                  ),
-                  const Spacer(flex: 1),
+                children: const [
+                  Spacer(flex: 1),
+                  WeekdayTextWidget(weekday: ''),
+                  Spacer(flex: 2),
+                  WeekdayTextWidget(weekday: 'Sun'),
+                  Spacer(flex: 2),
+                  WeekdayTextWidget(weekday: 'Mon'),
+                  Spacer(flex: 2),
+                  WeekdayTextWidget(weekday: 'Tue'),
+                  Spacer(flex: 2),
+                  WeekdayTextWidget(weekday: 'Wed'),
+                  Spacer(flex: 2),
+                  WeekdayTextWidget(weekday: 'Thu'),
+                  Spacer(flex: 2),
+                  WeekdayTextWidget(weekday: 'Fri'),
+                  Spacer(flex: 2),
+                  WeekdayTextWidget(weekday: 'Sat'),
+                  Spacer(flex: 1),
                 ],
               ),
             ),
             Expanded(
               child: SingleChildScrollView(
+                reverse: true,
                 scrollDirection: Axis.horizontal,
                 child: GridView.builder(
                     scrollDirection: Axis.horizontal,
-                    reverse: false,
                     physics: const ClampingScrollPhysics(),
                     shrinkWrap: true,
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 8,
                     ),
-                    itemCount: items.length + weekday + weeksCount.toInt(),
+                    itemCount: items.length + weekday + weeksCount,
                     itemBuilder: (BuildContext context, int key) {
                       int index = key - weekday - 1;
                       int newIndex = index - indexIgnoreCount;
@@ -164,26 +204,29 @@ class CalendarUI extends StatelessWidget {
                           //check frist day of a week
                           String month = '';
 
-                          log('-------- key : $key');
+                          try {
+                            for (int i = key; i < key + 7; i++) {
+                              int checkIndex = i - weekday - indexIgnoreCount;
 
-                          for (int i = key; i < key + 7; i++) {
-                            if (i >= weekday) {
-                              log('${newList[i - weekday - indexIgnoreCount]}');
+                              if (checkIndex < newList.length) {
+                                if (i >= weekday &&
+                                    newList[i - weekday - indexIgnoreCount]
+                                            .day ==
+                                        1) {
+                                  month = monthMap[
+                                      newList[i - weekday - indexIgnoreCount]
+                                          .month];
+                                }
+                              }
                             }
-
-                            if (i >= weekday &&
-                                newList[i - weekday - indexIgnoreCount].day ==
-                                    1) {
-                              log('isFirstDaty : ${newList[i - weekday - indexIgnoreCount]}');
-                              month = newList[i - weekday - indexIgnoreCount]
-                                  .month
-                                  .toString();
-                            }
+                          } catch (e) {
+                            log('$e');
                           }
 
                           return Container(
                             margin: const EdgeInsets.all(6),
                             child: Container(
+                              alignment: Alignment.bottomCenter,
                               decoration: BoxDecoration(
                                 color: Theme.of(context)
                                     .highlightColor
@@ -191,16 +234,15 @@ class CalendarUI extends StatelessWidget {
                                 borderRadius:
                                     const BorderRadius.all(Radius.circular(5)),
                               ),
-                              child: Center(
-                                child: Text(
-                                  month,
-                                  style: TextStyle(
-                                      fontSize: 7.sp,
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .displayLarge
-                                          ?.color),
-                                ),
+                              child: Text(
+                                month,
+                                style: TextStyle(
+                                    fontSize: 7.sp,
+                                    fontWeight: FontWeight.w800,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .displayLarge
+                                        ?.color),
                               ),
                             ),
                           );
@@ -242,177 +284,21 @@ class CalendarUI extends StatelessWidget {
   }
 }
 
-/* class CalendarUI extends StatelessWidget {
-  const CalendarUI({super.key});
+class WeekdayTextWidget extends StatelessWidget {
+  final String weekday;
+  const WeekdayTextWidget({
+    super.key,
+    required this.weekday,
+  });
 
   @override
   Widget build(BuildContext context) {
-    DateTime nowDate = DateTime.now();
-    DateTime startDate = DateTime(2022, 11, 01);
-
-    String endDateWeekday = DateFormat('EEEE').format(startDate);
-
-    Map weekDayMap = {
-      'Sunday': 0,
-      'Monday': 1,
-      'Tuesday': 2,
-      'Wednesday': 3,
-      'Thursday': 4,
-      'Friday': 5,
-      'Saturday': 6,
-    };
-
-    int weekday = weekDayMap[endDateWeekday]; //DateTime.now().weekday + 1;
-
-    getDaysInBetween() {
-      final int difference =
-          nowDate.difference(startDate).inDays + 1; //couting today
-      return difference;
-    }
-
-    final items = List<DateTime>.generate(getDaysInBetween(), (i) {
-      DateTime date = startDate;
-
-      return date.add(Duration(days: i));
-    });
-
-    var newList = items.toList();
-
-    double weeksCount = (items.length + weekday) / 7;
-
-    getDaysInBetween();
-
-    int indexIgnoreCount = 0;
-
-    int totalCount = items.length + weekday + weeksCount.toInt();
-
-    log('totalCount : $totalCount');
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 60),
-      child: Column(
-        children: [
-          Container(
-            color: Colors.red,
-            constraints: const BoxConstraints(
-              minHeight: 50,
-            ),
-            child: Row(
-              // crossAxisAlignment: ,
-              /* mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween, */
-              children: [
-                const Spacer(flex: 1),
-                Text(
-                  'Year',
-                  style: TextStyle(
-                      fontSize: 12,
-                      color: Theme.of(context).textTheme.displayLarge?.color),
-                ),
-                const Spacer(flex: 2),
-                Text(
-                  'Sun',
-                  style: TextStyle(
-                      color: Theme.of(context).textTheme.displayLarge?.color),
-                ),
-                const Spacer(flex: 2),
-                Text(
-                  'Mon',
-                  style: TextStyle(
-                      color: Theme.of(context).textTheme.displayLarge?.color),
-                ),
-                const Spacer(flex: 2),
-                Text(
-                  'Tue',
-                  style: TextStyle(
-                      color: Theme.of(context).textTheme.displayLarge?.color),
-                ),
-                const Spacer(flex: 2),
-                Text(
-                  'Wed',
-                  style: TextStyle(
-                      color: Theme.of(context).textTheme.displayLarge?.color),
-                ),
-                const Spacer(flex: 2),
-                Text(
-                  'Thu',
-                  style: TextStyle(
-                      color: Theme.of(context).textTheme.displayLarge?.color),
-                ),
-                const Spacer(flex: 2),
-                Text(
-                  'Fri',
-                  style: TextStyle(
-                      color: Theme.of(context).textTheme.displayLarge?.color),
-                ),
-                const Spacer(flex: 2),
-                Text(
-                  'Sat',
-                  style: TextStyle(
-                      color: Theme.of(context).textTheme.displayLarge?.color),
-                ),
-                const Spacer(flex: 1),
-              ],
-            ),
-          ),
-          Expanded(
-            child: SingleChildScrollView(
-              child: GridView.builder(
-                  scrollDirection: Axis.vertical,
-                  reverse: true,
-                  physics: const ClampingScrollPhysics(),
-                  shrinkWrap: true,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 8,
-                  ),
-                  itemCount: items.length + weekday + weeksCount.toInt(),
-                  itemBuilder: (BuildContext context, int key) {
-                    log('key : $key');
-                    if (key < weekday + 1 || key % 8 == 0) {
-                      if (key > 0 && key % 8 == 0) {
-                        indexIgnoreCount++;
-                        log('igrnore + 1 : $indexIgnoreCount');
-                      } else if (key == 0) {
-                        indexIgnoreCount = 0;
-                        log('igrnore init : $indexIgnoreCount');
-                      }
-                      return Card(
-                        margin: const EdgeInsets.all(6),
-                        color: Theme.of(context).highlightColor,
-                      );
-                    } else {
-                      int index = key - weekday - 1;
-                      log('key : $key');
-                      log('weekday : $weekday');
-                      log('index : $index');
-                      log('indexIgnoreCount : $indexIgnoreCount');
-                      log('totalCount : $totalCount');
-                      int newIndex = index - indexIgnoreCount;
-                      if (newIndex < 0) {
-                        newIndex = 0;
-                      }
-                      return Card(
-                        margin: const EdgeInsets.all(6),
-                        //color: Theme.of(context).primaryColor.withOpacity(0.7),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color:
-                                Theme.of(context).primaryColor.withOpacity(0.6),
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(5)),
-                          ),
-                          child: Center(
-                            child: Text(
-                                '${newList[newIndex].month}/${newList[newIndex].day}'),
-                          ),
-                        ),
-                      );
-                    }
-                  }),
-            ),
-          ),
-        ],
-      ),
+    return Text(
+      weekday,
+      style: TextStyle(
+          fontSize: 7.sp,
+          fontWeight: FontWeight.w800,
+          color: Theme.of(context).textTheme.displayLarge?.color),
     );
   }
-} */
+}

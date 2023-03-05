@@ -65,7 +65,7 @@ class FeedHomeScreenState extends State<FeedHomeScreen> {
       itemCount: snapshot.data!.length,
       padding: const EdgeInsets.symmetric(
         vertical: 10,
-        horizontal: 10,
+        horizontal: 0,
       ),
       itemBuilder: (context, index) {
         var note = snapshot.data![index];
