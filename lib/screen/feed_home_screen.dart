@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lingonote/data/models/note_model.dart';
 import 'package:lingonote/data/repositories/base_repo.dart';
+import 'package:lingonote/data/repositories/local_service.dart';
 import 'package:lingonote/managers/string_mgr.dart';
 import 'package:lingonote/screen/edit_note_screen.dart';
 import 'package:lingonote/widgets/note_widget.dart';
@@ -16,12 +17,12 @@ class FeedHomeScreen extends StatefulWidget {
 }
 
 class FeedHomeScreenState extends State<FeedHomeScreen> {
-  Future<List<NoteModel>>? notes = BaseRepo().fetchMyNotes(
+  Future<List<NoteModel>>? notes = BaseRepo(LocalService()).fetchMyNotes(
       1234567890123456 /* PrefMgr().prefs.getInt(PrefMgr.uid) ?? -1 */);
 
   void fetchNotes() {
     setState(() {
-      notes = BaseRepo().fetchMyNotes(
+      notes = BaseRepo(LocalService()).fetchMyNotes(
           1234567890123456 /* PrefMgr().prefs.getInt(PrefMgr.uid) ?? -1 */);
     });
   }

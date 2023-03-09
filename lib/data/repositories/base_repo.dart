@@ -1,35 +1,28 @@
 import 'package:lingonote/data/models/note_model.dart';
 import 'package:lingonote/data/repositories/api_blueprint.dart';
-import 'package:lingonote/data/repositories/api_service.dart';
-import 'package:lingonote/data/repositories/local_service.dart';
-import 'package:lingonote/data/repositories/mock_service.dart';
 
 class BaseRepo extends ApiBlueprint {
-  final ApiService _apiService = ApiService();
-  final LocalService _localService = LocalService();
-  final MockService _mockService = MockService();
+  final ApiBlueprint service;
+  static BaseRepo? _instance;
+
   late ApiBlueprint baseService;
 
-  BaseRepo._internal();
-
-  static final BaseRepo _singleton = BaseRepo._internal();
-
-  factory BaseRepo() {
-    return _singleton.initRepo();
+  factory BaseRepo(ApiBlueprint service) {
+    _instance ??= BaseRepo._internal(service);
+    return _instance!;
   }
 
-  BaseRepo initRepo() {
-    baseService = _mockService; // Mock Service
-    return _singleton;
+  BaseRepo._internal(this.service) {
+    baseService = service;
   }
 
   @override
   Future<List<NoteModel>>? fetchMyNotes(int userUid) async {
-    return await _localService.fetchMyNotes(userUid)!;
+    return await service.fetchMyNotes(userUid)!;
   }
 
   @override
   Future postNote(NoteModel note) async {
-    return await _localService.postNote(note);
+    return await service.postNote(note);
   }
 }

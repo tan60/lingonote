@@ -2,6 +2,15 @@ import 'package:lingonote/data/models/note_model.dart';
 import 'package:lingonote/data/repositories/api_blueprint.dart';
 
 class ApiService extends ApiBlueprint {
+  static ApiService? _instance;
+
+  factory ApiService() {
+    _instance ??= ApiService._internal();
+    return _instance!;
+  }
+
+  ApiService._internal();
+
   @override
   Future<List<NoteModel>>? fetchMyNotes(int userUid) {
     return null;

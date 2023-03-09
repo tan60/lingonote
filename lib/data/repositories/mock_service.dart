@@ -2,6 +2,15 @@ import 'package:lingonote/data/models/note_model.dart';
 import 'package:lingonote/data/repositories/api_blueprint.dart';
 
 class MockService extends ApiBlueprint {
+  static MockService? _instance;
+
+  factory MockService() {
+    _instance ??= MockService._internal();
+    return _instance!;
+  }
+
+  MockService._internal();
+
   @override
   Future<List<NoteModel>>? fetchMyNotes(int userUid) async {
     return await Future<List<NoteModel>>.delayed(const Duration(seconds: 1),

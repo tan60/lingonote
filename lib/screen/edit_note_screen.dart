@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lingonote/data/models/note_model.dart';
 import 'package:lingonote/data/repositories/base_repo.dart';
+import 'package:lingonote/data/repositories/local_service.dart';
 import 'package:lingonote/managers/pref_mgr.dart';
 import 'package:lingonote/managers/string_mgr.dart';
 import 'package:lingonote/themes/my_themes.dart';
@@ -263,7 +264,7 @@ class _EditNoteScreenState extends State<EditNoteScreen>
   }
 
   Future<NoteModel>? _postNote(BuildContext context, NoteModel note) async {
-    NoteModel resultNote = await BaseRepo().postNote(note);
+    NoteModel resultNote = await BaseRepo(LocalService()).postNote(note);
     return resultNote;
   }
 

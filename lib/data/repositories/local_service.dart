@@ -3,6 +3,15 @@ import 'package:lingonote/data/repositories/api_blueprint.dart';
 import 'package:lingonote/data/repositories/database/database_helper.dart';
 
 class LocalService extends ApiBlueprint {
+  static LocalService? _instance;
+
+  factory LocalService() {
+    _instance ??= LocalService._internal();
+    return _instance!;
+  }
+
+  LocalService._internal();
+
   @override
   Future<List<NoteModel>>? fetchMyNotes(int userUid) {
     return DataBaseHelper().getNotes(userUid);
