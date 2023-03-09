@@ -14,7 +14,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<FeedHomeScreenState> _feedHomeWidgetKey = GlobalKey();
-  final double _bottomNavigationBarHeight = 80;
+  final double _bottomNavigationBarHeight = 75;
   int _selectedBottomNavIndex = 0;
 
   late final dynamic pages;
@@ -54,8 +54,8 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: Padding(
         padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
         child: SizedBox(
-          width: 75,
-          height: 75,
+          width: 60,
+          height: 60,
           child: FloatingActionButton(
             child: const Icon(Icons.create_rounded),
             onPressed: () {
