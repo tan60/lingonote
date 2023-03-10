@@ -16,6 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<FeedHomeScreenState> _feedHomeWidgetKey = GlobalKey();
   final double _bottomNavigationBarHeight = 75;
   int _selectedBottomNavIndex = 0;
+  final int _bottomNavMaxCount = 3;
 
   late final dynamic pages;
 
@@ -51,29 +52,26 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: pages[_selectedBottomNavIndex],
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-        child: SizedBox(
-          width: 60,
-          height: 60,
-          child: FloatingActionButton(
-            child: const Icon(Icons.create_rounded),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const EditNoteScreen(),
-                  fullscreenDialog: true,
-                  allowSnapshotting: true,
-                ),
-              ).then((value) {
-                _feedHomeWidgetKey.currentState?.fetchNotes();
-              });
-            },
-          ),
+      floatingActionButton: SizedBox(
+        width: 65,
+        height: 65,
+        child: FloatingActionButton(
+          child: const Icon(Icons.create_rounded),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const EditNoteScreen(),
+                fullscreenDialog: true,
+                allowSnapshotting: true,
+              ),
+            ).then((value) {
+              _feedHomeWidgetKey.currentState?.fetchNotes();
+            });
+          },
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: buildBottomNavBar(),
     );
   }
@@ -100,9 +98,10 @@ class _HomeScreenState extends State<HomeScreen> {
         Row(
           children: <Widget>[
             buildNavBarItem(Icons.dynamic_feed_rounded, 0, true),
-            buildNavBarItem(Icons.auto_graph_rounded, 1, true),
-            buildNavBarItem(Icons.format_quote_rounded, 2, true),
-            buildNavBarItem(Icons.pages, 4, false),
+            buildNavBarItem(Icons.pages, 1, false),
+            buildNavBarItem(Icons.auto_graph_rounded, 2, true),
+            //buildNavBarItem(Icons.format_quote_rounded, 2, true),
+            //buildNavBarItem(Icons.pages, 4, false),
           ],
         ),
       ],
@@ -110,6 +109,9 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget buildNavBarItem(IconData icon, int index, bool enable) {
+    double padding = 40;
+    double leftPadding = index == 0 ? padding : 0;
+    double rightPadding = index == 2 ? padding : 0;
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -119,14 +121,17 @@ class _HomeScreenState extends State<HomeScreen> {
         });
       },
       child: Container(
+        padding: EdgeInsets.fromLTRB(leftPadding, 0, rightPadding, 0),
         height: _bottomNavigationBarHeight,
-        width: MediaQuery.of(context).size.width / 4,
+        width: MediaQuery.of(context).size.width / _bottomNavMaxCount,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.only(
             topLeft: index == 0 ? const Radius.circular(25) : Radius.zero,
-            topRight: index == 3 ? const Radius.circular(25) : Radius.zero,
+            topRight: index == _bottomNavMaxCount - 1
+                ? const Radius.circular(25)
+                : Radius.zero,
           ),
-          color: Theme.of(context).scaffoldBackgroundColor,
+          color: Theme.of(context).cardColor,
         ),
         child: enable
             ? Column(

@@ -39,4 +39,10 @@ class LanguageKr extends Languages {
 
   @override
   String get showOriginalNote => "Original";
+
+  @override
+  String get your => "당신의";
+
+  @override
+  String get archivement => "성취 기록";
 }

@@ -39,4 +39,10 @@ class LanguageEn extends Languages {
 
   @override
   String get showOriginalNote => "Original";
+
+  @override
+  String get your => "Your";
+
+  @override
+  String get archivement => "Archivement";
 }

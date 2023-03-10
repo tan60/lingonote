@@ -65,4 +65,10 @@ class StringMgr extends Languages {
 
   @override
   String get showOriginalNote => localeLanguage.showOriginalNote;
+
+  @override
+  String get your => localeLanguage.your;
+
+  @override
+  String get archivement => localeLanguage.archivement;
 }

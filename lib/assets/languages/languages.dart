@@ -30,4 +30,8 @@ abstract class Languages {
   String get showCorrectedNote;
 
   String get showOriginalNote;
+
+  String get your;
+
+  String get archivement;
 }

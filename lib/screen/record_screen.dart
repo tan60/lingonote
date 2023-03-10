@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:lingonote/managers/string_mgr.dart';
 import 'package:sizer/sizer.dart';
 
 class RecordScreen extends StatefulWidget {
@@ -25,18 +26,41 @@ class _RecordScreenState extends State<RecordScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Ink(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).disabledColor.withOpacity(0.3),
-                    borderRadius: BorderRadius.circular(18),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        StringMgr().your,
+                        style: TextStyle(
+                            fontSize: 24.sp,
+                            color: Theme.of(context)
+                                .textTheme
+                                .displayLarge
+                                ?.color),
+                      ),
+                      Text(
+                        StringMgr().archivement,
+                        style: TextStyle(
+                            fontSize: 24.sp,
+                            fontWeight: FontWeight.w600,
+                            color: Theme.of(context)
+                                .textTheme
+                                .displayLarge
+                                ?.color),
+                      ),
+                    ],
                   ),
+                ),
+                Ink(
                   child: InkWell(
                     onTap: () {},
                     child: Container(
                       alignment: Alignment.center,
-                      padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
                       child: const SizedBox(
                         width: 32,
                         height: 32,
@@ -55,24 +79,15 @@ class _RecordScreenState extends State<RecordScreen> {
           Expanded(
             flex: 30,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Your',
-                    style: TextStyle(
-                        fontSize: 24.sp,
-                        color: Theme.of(context).textTheme.displayLarge?.color),
-                  ),
-                  Text(
-                    'Statistics',
-                    style: TextStyle(
-                        fontSize: 24.sp,
-                        fontWeight: FontWeight.w600,
-                        color: Theme.of(context).textTheme.displayLarge?.color),
-                  ),
-                ],
+              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 30),
+              child: Container(
+                alignment: Alignment.bottomCenter,
+                child: Text(
+                  '"20일 동안 총 15개의 영문을 작성했습니다."',
+                  style: TextStyle(
+                      fontSize: 20.sp,
+                      color: Theme.of(context).textTheme.displayLarge?.color),
+                ),
               ),
             ),
           ),
