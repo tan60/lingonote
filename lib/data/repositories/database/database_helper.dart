@@ -109,4 +109,32 @@ class DataBaseHelper {
       );
     });
   }
+
+  Future<int> getTotalCountNotes() async {
+    final db = await openDB();
+    var x = await db.rawQuery('select count(*) from post');
+    int totalCount = Sqflite.firstIntValue(x)!;
+    return totalCount;
+  }
+
+  Future<NoteModel>? getFristNote(int userUid) async {
+    final db = await openDB();
+    List<Map<String, dynamic>> maps = await db.query('post',
+        where: 'user_uid = ?',
+        whereArgs: [userUid],
+        orderBy: 'post_no DESC',
+        limit: 1);
+
+    return List.generate(maps.length, (i) {
+      return NoteModel(
+        topic: maps[i]['post_topic'],
+        contents: maps[i]['post_contents'],
+        improved: maps[i]['post_improved'],
+        improvedType: maps[i]['post_improved_type'],
+        issueDate: maps[i]['post_issue_date_time'],
+        fixedDate: maps[i]['post_fixed_date_time'],
+        userUid: maps[i]['user_uid'],
+      );
+    })[0];
+  }
 }

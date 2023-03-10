@@ -39,4 +39,14 @@ class MockService extends ApiBlueprint {
   Future? postNote(NoteModel note) {
     return null;
   }
+
+  @override
+  Future<int> fetchTotalPostedCount(int userUid) async {
+    return 0;
+  }
+
+  @override
+  Future<NoteModel>? fetchFirstNote(int userUid) {
+    return null;
+  }
 }

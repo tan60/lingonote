@@ -25,4 +25,14 @@ class BaseRepo extends ApiBlueprint {
   Future postNote(NoteModel note) async {
     return await service.postNote(note);
   }
+
+  @override
+  Future<int> fetchTotalPostedCount(int userUid) async {
+    return await service.fetchTotalPostedCount(userUid);
+  }
+
+  @override
+  Future<NoteModel>? fetchFirstNote(int userUid) async {
+    return await service.fetchFirstNote(userUid)!;
+  }
 }

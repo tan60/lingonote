@@ -2,6 +2,9 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:lingonote/data/models/note_model.dart';
+import 'package:lingonote/data/repositories/base_repo.dart';
+import 'package:lingonote/data/repositories/local_service.dart';
 import 'package:lingonote/managers/string_mgr.dart';
 import 'package:sizer/sizer.dart';
 
@@ -13,6 +16,11 @@ class RecordScreen extends StatefulWidget {
 }
 
 class _RecordScreenState extends State<RecordScreen> {
+  Future<int> totalCount =
+      BaseRepo(LocalService()).fetchTotalPostedCount(1234567890123456);
+  Future<NoteModel>? firstNote = BaseRepo(LocalService()).fetchFirstNote(
+      1234567890123456 /* PrefMgr().prefs.getInt(PrefMgr.uid) ?? -1 */);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -82,11 +90,55 @@ class _RecordScreenState extends State<RecordScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 30),
               child: Container(
                 alignment: Alignment.bottomCenter,
-                child: Text(
-                  '"20일 동안 총 15개의 영문을 작성했습니다."',
-                  style: TextStyle(
-                      fontSize: 20.sp,
-                      color: Theme.of(context).textTheme.displayLarge?.color),
+                child: FutureBuilder(
+                  future: totalCount,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      int totalCount = snapshot.data!;
+
+                      return FutureBuilder(
+                        future: firstNote,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            String dates = snapshot.data!.issueDate;
+                            return Text(
+                              '"$dates일 동안 총 $totalCount개의 영문을 작성했습니다."',
+                              style: TextStyle(
+                                  fontSize: 20.sp,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .displayLarge
+                                      ?.color),
+                            );
+                          } else {
+                            return Text(
+                              '당신의 최고 성취를 이뤄보세요.',
+                              style: TextStyle(
+                                  fontSize: 20.sp,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .displayLarge
+                                      ?.color),
+                            );
+                          }
+                        },
+                      );
+                    }
+
+                    return Text(
+                      '당신의 최고 성취를 이뤄보세요.',
+                      style: TextStyle(
+                          fontSize: 20.sp,
+                          color:
+                              Theme.of(context).textTheme.displayLarge?.color),
+                    );
+                  },
+                  /* child: Text(
+                    '"20일 동안 총 15개의 영문을 작성했습니다."',
+                    style: TextStyle(
+                        fontSize: 20.sp,
+                        color: Theme.of(context).textTheme.displayLarge?.color),
+                  ), */
                 ),
               ),
             ),

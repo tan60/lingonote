@@ -21,4 +21,14 @@ class LocalService extends ApiBlueprint {
   Future postNote(NoteModel note) {
     return DataBaseHelper().addNote(note);
   }
+
+  @override
+  Future<int> fetchTotalPostedCount(int userUid) async {
+    return DataBaseHelper().getTotalCountNotes();
+  }
+
+  @override
+  Future<NoteModel>? fetchFirstNote(int userUid) {
+    return DataBaseHelper().getFristNote(userUid);
+  }
 }

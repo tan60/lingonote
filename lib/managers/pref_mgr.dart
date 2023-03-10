@@ -5,10 +5,6 @@ class PrefMgr {
   static const String uid = "uid";
   static late SharedPreferences prefs;
 
-  /* factory PrefMgr() {
-    return _singleton;
-  } */
-
   PrefMgr._internal();
 
   static Future<SharedPreferences> initPref() async {
