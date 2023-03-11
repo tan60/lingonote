@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lingonote/data/models/note_model.dart';
-import 'package:lingonote/data/repositories/base_repo.dart';
+import 'package:lingonote/data/repositories/repo.dart';
 import 'package:lingonote/data/repositories/local_service.dart';
+import 'package:lingonote/managers/pref_mgr.dart';
 import 'package:lingonote/managers/string_mgr.dart';
 import 'package:lingonote/screen/edit_note_screen.dart';
 import 'package:lingonote/widgets/note_widget.dart';
@@ -17,13 +18,13 @@ class FeedHomeScreen extends StatefulWidget {
 }
 
 class FeedHomeScreenState extends State<FeedHomeScreen> {
-  Future<List<NoteModel>>? notes = BaseRepo(LocalService()).fetchMyNotes(
-      1234567890123456 /* PrefMgr().prefs.getInt(PrefMgr.uid) ?? -1 */);
+  Future<List<NoteModel>>? notes = Repo(LocalService())
+      .fetchMyNotes(PrefMgr.prefs.getInt(PrefMgr.uid) ?? -1);
 
   void fetchNotes() {
     setState(() {
-      notes = BaseRepo(LocalService()).fetchMyNotes(
-          1234567890123456 /* PrefMgr().prefs.getInt(PrefMgr.uid) ?? -1 */);
+      notes = Repo(LocalService())
+          .fetchMyNotes(PrefMgr.prefs.getInt(PrefMgr.uid) ?? -1);
     });
   }
 
@@ -70,7 +71,7 @@ class FeedHomeScreenState extends State<FeedHomeScreen> {
       ),
       itemBuilder: (context, index) {
         var note = snapshot.data![index];
-        DateTime issueServerTime = DateTime.parse(note.issueDate);
+        DateTime issueServerTime = DateTime.parse(note.issueDateTime);
         String formattedTime = DateFormat('yyyy.MM.dd').format(issueServerTime);
 
         return Note(

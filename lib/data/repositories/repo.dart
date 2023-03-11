@@ -1,18 +1,19 @@
+import 'package:lingonote/data/models/archive_model.dart';
 import 'package:lingonote/data/models/note_model.dart';
-import 'package:lingonote/data/repositories/api_blueprint.dart';
+import 'package:lingonote/data/repositories/base_service.dart';
 
-class BaseRepo extends ApiBlueprint {
-  final ApiBlueprint service;
-  static BaseRepo? _instance;
+class Repo extends BaseService {
+  final BaseService service;
+  static Repo? _instance;
 
-  late ApiBlueprint baseService;
+  late BaseService baseService;
 
-  factory BaseRepo(ApiBlueprint service) {
-    _instance ??= BaseRepo._internal(service);
+  factory Repo(BaseService service) {
+    _instance ??= Repo._internal(service);
     return _instance!;
   }
 
-  BaseRepo._internal(this.service) {
+  Repo._internal(this.service) {
     baseService = service;
   }
 
@@ -34,5 +35,10 @@ class BaseRepo extends ApiBlueprint {
   @override
   Future<NoteModel>? fetchFirstNote(int userUid) async {
     return await service.fetchFirstNote(userUid)!;
+  }
+
+  @override
+  Future<List<ArchiveModel>>? fetchArchive(int userUid) async {
+    return await service.fetchArchive(userUid)!;
   }
 }

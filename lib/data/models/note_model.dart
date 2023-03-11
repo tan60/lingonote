@@ -2,7 +2,8 @@ class NoteModel {
   late final String topic,
       contents,
       issueDate,
-      fixedDate,
+      issueDateTime,
+      fixedDateTime,
       improved,
       improvedType;
   late final int userUid;
@@ -13,7 +14,8 @@ class NoteModel {
     required this.topic,
     required this.contents,
     required this.issueDate,
-    required this.fixedDate,
+    required this.issueDateTime,
+    required this.fixedDateTime,
     required this.improved,
     required this.improvedType,
     required this.userUid,
@@ -23,8 +25,9 @@ class NoteModel {
       : postNo = json['post_no'],
         topic = json['topic'],
         contents = json['contents'],
-        issueDate = json['issue_date'], //20230227130155
-        fixedDate = json['fixed_date'],
+        issueDate = json['issue_date'], //yyyy-MM-dd
+        issueDateTime = json['issue_date_time'], //yyyy-MM-dd hh:MM:ss
+        fixedDateTime = json['fixed_date_time'], //yyyy-MM-dd hh:MM:ss
         userUid = json['user_uid'],
         improved = json['improved'],
         improvedType = json['improve_type'],

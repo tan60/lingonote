@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+import 'package:lingonote/data/models/archive_model.dart';
 import 'package:lingonote/data/models/note_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -47,6 +49,7 @@ class DataBaseHelper {
               post_topic TEXT NOT NULL,
               post_contents TEXT NOT NULL,
               post_improved TEXT NOT NULL,
+              post_issue_date TEXT NOT NULL,
               post_issue_date_time TEXT NOT NULL,
               post_fixed_date_time TEXT NOT NULL,
               post_improved_type TEXT NOT NULL,
@@ -58,14 +61,15 @@ class DataBaseHelper {
 
   Future addNote(NoteModel note) async {
     final db = await openDB();
+
     note.postNo = await db.insert(
       'post',
       {
         'post_topic': note.topic,
         'post_contents': note.contents,
         'post_improved': note.improved,
-        'post_issue_date_time': note.issueDate, //'2022-01-01 00:00:00',
-        'post_fixed_date_time': note.issueDate,
+        'post_issue_date_time': note.issueDateTime, //'2022-01-01 00:00:00',
+        'post_fixed_date_time': note.issueDateTime,
         'post_improved_type': note.improvedType,
         'user_uid': note.userUid
       },
@@ -83,7 +87,7 @@ class DataBaseHelper {
         'post_topic': note.topic,
         'post_contents': note.contents,
         'post_improved': note.improved,
-        'post_fixed_date_time': note.fixedDate, //'2022-01-01 00:00:00',
+        'post_fixed_date_time': note.fixedDateTime, //'2022-01-01 00:00:00',
         'post_improved_type': note.improvedType,
       },
       where: 'post_no = ?',
@@ -103,8 +107,9 @@ class DataBaseHelper {
         contents: maps[i]['post_contents'],
         improved: maps[i]['post_improved'],
         improvedType: maps[i]['post_improved_type'],
-        issueDate: maps[i]['post_issue_date_time'],
-        fixedDate: maps[i]['post_fixed_date_time'],
+        issueDate: maps[i]['post_issue_date'],
+        issueDateTime: maps[i]['post_issue_date_time'],
+        fixedDateTime: maps[i]['post_fixed_date_time'],
         userUid: maps[i]['user_uid'],
       );
     });
@@ -122,7 +127,7 @@ class DataBaseHelper {
     List<Map<String, dynamic>> maps = await db.query('post',
         where: 'user_uid = ?',
         whereArgs: [userUid],
-        orderBy: 'post_no DESC',
+        orderBy: 'post_no ASC',
         limit: 1);
 
     return List.generate(maps.length, (i) {
@@ -131,10 +136,28 @@ class DataBaseHelper {
         contents: maps[i]['post_contents'],
         improved: maps[i]['post_improved'],
         improvedType: maps[i]['post_improved_type'],
-        issueDate: maps[i]['post_issue_date_time'],
-        fixedDate: maps[i]['post_fixed_date_time'],
+        issueDate: maps[i]['post_issue_date'],
+        issueDateTime: maps[i]['post_issue_date_time'],
+        fixedDateTime: maps[i]['post_fixed_date_time'],
         userUid: maps[i]['user_uid'],
       );
     })[0];
+  }
+
+  Future<List<ArchiveModel>>? getArchive(int userUid) async {
+    final db = await openDB();
+    final format = DateFormat('yyyy-MM-dd');
+
+    List<Map<String, dynamic>> maps = await db.rawQuery('''
+        SELECT date(post_issue_date) AS date, COUNT(*) AS count 
+          FROM post GROUP BY date(post_issue_date)
+        ''');
+
+    return List.generate(maps.length, (i) {
+      return ArchiveModel(
+        date: maps[i]['date'] as String,
+        postedCount: maps[i]['count'] as int,
+      );
+    });
   }
 }

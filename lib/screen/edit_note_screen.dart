@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lingonote/data/models/note_model.dart';
-import 'package:lingonote/data/repositories/base_repo.dart';
+import 'package:lingonote/data/repositories/repo.dart';
 import 'package:lingonote/data/repositories/local_service.dart';
 import 'package:lingonote/managers/pref_mgr.dart';
 import 'package:lingonote/managers/string_mgr.dart';
@@ -33,17 +33,19 @@ class _EditNoteScreenState extends State<EditNoteScreen>
 
   @override
   void initState() {
-    getUid();
-    WidgetsBinding.instance.addObserver(this);
-    _brightness = WidgetsBinding.instance.window.platformBrightness;
     _scrollController = ScrollController();
     _topicTextEditingController = TextEditingController();
     _contentsTextEditingController = TextEditingController();
 
+    WidgetsBinding.instance.addObserver(this);
+    _brightness = WidgetsBinding.instance.window.platformBrightness;
+
+    _getUid();
+
     super.initState();
   }
 
-  Future getUid() async {
+  Future _getUid() async {
     userUid = PrefMgr.prefs.getInt(PrefMgr.uid) ?? -1;
   }
 
@@ -57,13 +59,12 @@ class _EditNoteScreenState extends State<EditNoteScreen>
   }
 
   @override
-  void didChangeDependencies() {
+  void didChangePlatformBrightness() {
     if (mounted) {
       setState(() {
         _brightness = WidgetsBinding.instance.window.platformBrightness;
       });
     }
-    super.didChangeDependencies();
   }
 
   void _setPreviewEnable(bool enable) {
@@ -130,18 +131,6 @@ class _EditNoteScreenState extends State<EditNoteScreen>
           ),
         ],
         automaticallyImplyLeading: false,
-        /* leading: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-          child: RoundedIconButton(
-            iconData: Icons.close_rounded,
-            enableColor: null,
-            isEnable: true,
-            isLoading: false,
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
-        ), */
       ),
       body: Container(
         padding: const EdgeInsets.all(20),
@@ -249,14 +238,16 @@ class _EditNoteScreenState extends State<EditNoteScreen>
     String improved = "";
     String improvedType = "none";
     var now = DateTime.now();
-    String issueDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
-    String fixedData = issueDate;
+    String issueDate = DateFormat('yyyy-MM-dd').format(now);
+    String issueDateTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
+    String fixedDataTime = issueDateTime;
 
     return NoteModel(
       topic: topic,
       contents: contents,
       issueDate: issueDate,
-      fixedDate: fixedData,
+      issueDateTime: issueDateTime,
+      fixedDateTime: fixedDataTime,
       userUid: userUid,
       improved: improved,
       improvedType: improvedType,
@@ -264,7 +255,7 @@ class _EditNoteScreenState extends State<EditNoteScreen>
   }
 
   Future<NoteModel>? _postNote(BuildContext context, NoteModel note) async {
-    NoteModel resultNote = await BaseRepo(LocalService()).postNote(note);
+    NoteModel resultNote = await Repo(LocalService()).postNote(note);
     return resultNote;
   }
 

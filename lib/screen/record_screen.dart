@@ -2,9 +2,11 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:lingonote/data/models/archive_model.dart';
 import 'package:lingonote/data/models/note_model.dart';
-import 'package:lingonote/data/repositories/base_repo.dart';
+import 'package:lingonote/data/repositories/repo.dart';
 import 'package:lingonote/data/repositories/local_service.dart';
+import 'package:lingonote/managers/pref_mgr.dart';
 import 'package:lingonote/managers/string_mgr.dart';
 import 'package:sizer/sizer.dart';
 
@@ -16,10 +18,14 @@ class RecordScreen extends StatefulWidget {
 }
 
 class _RecordScreenState extends State<RecordScreen> {
-  Future<int> totalCount =
-      BaseRepo(LocalService()).fetchTotalPostedCount(1234567890123456);
-  Future<NoteModel>? firstNote = BaseRepo(LocalService()).fetchFirstNote(
-      1234567890123456 /* PrefMgr().prefs.getInt(PrefMgr.uid) ?? -1 */);
+  Future<int> totalCount = Repo(LocalService())
+      .fetchTotalPostedCount(PrefMgr.prefs.getInt(PrefMgr.uid) ?? -1);
+
+  Future<NoteModel>? firstNote = Repo(LocalService())
+      .fetchFirstNote(PrefMgr.prefs.getInt(PrefMgr.uid) ?? -1);
+
+  Future<List<ArchiveModel>>? archives = Repo(LocalService())
+      .fetchArchive(PrefMgr.prefs.getInt(PrefMgr.uid) ?? -1);
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +51,7 @@ class _RecordScreenState extends State<RecordScreen> {
                         StringMgr().your,
                         style: TextStyle(
                             fontSize: 24.sp,
+                            fontWeight: FontWeight.w200,
                             color: Theme.of(context)
                                 .textTheme
                                 .displayLarge
@@ -54,7 +61,7 @@ class _RecordScreenState extends State<RecordScreen> {
                         StringMgr().archivement,
                         style: TextStyle(
                             fontSize: 24.sp,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w400,
                             color: Theme.of(context)
                                 .textTheme
                                 .displayLarge
@@ -69,12 +76,12 @@ class _RecordScreenState extends State<RecordScreen> {
                     child: Container(
                       alignment: Alignment.center,
                       padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-                      child: const SizedBox(
+                      child: SizedBox(
                         width: 32,
                         height: 32,
                         child: Icon(
                           Icons.settings_rounded,
-                          color: Colors.white,
+                          color: Theme.of(context).focusColor,
                           size: 32,
                         ),
                       ),
@@ -87,7 +94,7 @@ class _RecordScreenState extends State<RecordScreen> {
           Expanded(
             flex: 30,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 30),
+              padding: const EdgeInsets.symmetric(horizontal: 40),
               child: Container(
                 alignment: Alignment.bottomCenter,
                 child: FutureBuilder(
@@ -100,9 +107,14 @@ class _RecordScreenState extends State<RecordScreen> {
                         future: firstNote,
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
-                            String dates = snapshot.data!.issueDate;
+                            DateTime nowDateTime = DateTime.now();
+                            DateTime firstPostTime =
+                                DateTime.parse(snapshot.data!.issueDateTime);
+
+                            int days = nowDateTime.day - firstPostTime.day;
+
                             return Text(
-                              '"$dates일 동안 총 $totalCount개의 영문을 작성했습니다."',
+                              '"$days일 동안 총 $totalCount개의 영문을 작성했습니다."',
                               style: TextStyle(
                                   fontSize: 20.sp,
                                   color: Theme.of(context)
@@ -111,14 +123,28 @@ class _RecordScreenState extends State<RecordScreen> {
                                       ?.color),
                             );
                           } else {
-                            return Text(
-                              '당신의 최고 성취를 이뤄보세요.',
-                              style: TextStyle(
-                                  fontSize: 20.sp,
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .displayLarge
-                                      ?.color),
+                            return Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Icon(
+                                  Icons.auto_graph,
+                                  size: 100,
+                                  color: Theme.of(context).hintColor,
+                                ),
+                                const SizedBox(
+                                  height: 24,
+                                ),
+                                Text(
+                                  '당신의 최고 성취를 이뤄보세요.',
+                                  style: TextStyle(
+                                      fontSize: 18.sp,
+                                      fontWeight: FontWeight.w300,
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .displayLarge
+                                          ?.color),
+                                ),
+                              ],
                             );
                           }
                         },
@@ -129,23 +155,26 @@ class _RecordScreenState extends State<RecordScreen> {
                       '당신의 최고 성취를 이뤄보세요.',
                       style: TextStyle(
                           fontSize: 20.sp,
+                          fontWeight: FontWeight.w200,
                           color:
                               Theme.of(context).textTheme.displayLarge?.color),
                     );
                   },
-                  /* child: Text(
-                    '"20일 동안 총 15개의 영문을 작성했습니다."',
-                    style: TextStyle(
-                        fontSize: 20.sp,
-                        color: Theme.of(context).textTheme.displayLarge?.color),
-                  ), */
                 ),
               ),
             ),
           ),
-          const Expanded(
+          Expanded(
             flex: 70,
-            child: CalendarUI(),
+            child: FutureBuilder(
+              future: archives,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  log(snapshot.data!.toString());
+                }
+                return const CalendarUI();
+              },
+            ),
           ),
         ],
       ),
@@ -294,23 +323,7 @@ class CalendarUI extends StatelessWidget {
                             margin: const EdgeInsets.all(6),
                             child: Container(
                               alignment: Alignment.bottomCenter,
-                              decoration: BoxDecoration(
-                                color: Theme.of(context)
-                                    .highlightColor
-                                    .withOpacity(0),
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(5)),
-                              ),
-                              child: Text(
-                                month,
-                                style: TextStyle(
-                                    fontSize: 7.sp,
-                                    fontWeight: FontWeight.w800,
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .displayLarge
-                                        ?.color),
-                              ),
+                              child: MonthlyTextWidget(month: month),
                             ),
                           );
                         } else if (key == 0) {
@@ -351,12 +364,33 @@ class CalendarUI extends StatelessWidget {
   }
 }
 
+class MonthlyTextWidget extends StatelessWidget {
+  const MonthlyTextWidget({
+    super.key,
+    required this.month,
+  });
+
+  final String month;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      month,
+      style: TextStyle(
+          fontSize: 7.sp,
+          fontWeight: FontWeight.w800,
+          color: Theme.of(context).textTheme.displayLarge?.color),
+    );
+  }
+}
+
 class WeekdayTextWidget extends StatelessWidget {
-  final String weekday;
   const WeekdayTextWidget({
     super.key,
     required this.weekday,
   });
+
+  final String weekday;
 
   @override
   Widget build(BuildContext context) {

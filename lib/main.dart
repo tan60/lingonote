@@ -48,13 +48,13 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   }
 
   @override
-  void didChangeDependencies() {
+  void didChangePlatformBrightness() {
     if (mounted) {
       setState(() {
         _brightness = WidgetsBinding.instance.window.platformBrightness;
       });
     }
-    super.didChangeDependencies();
+    super.didChangePlatformBrightness();
   }
 
   @override

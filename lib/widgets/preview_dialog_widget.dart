@@ -13,7 +13,7 @@ class PreviewDialogWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DateTime issueServerTime = DateTime.parse(note.issueDate);
+    DateTime issueServerTime = DateTime.parse(note.issueDateTime);
     String formattedTime = DateFormat('yyyy.MM.dd').format(issueServerTime);
     bool isCorrected = note.improvedType == "none";
 

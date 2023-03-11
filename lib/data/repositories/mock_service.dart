@@ -1,7 +1,8 @@
+import 'package:lingonote/data/models/archive_model.dart';
 import 'package:lingonote/data/models/note_model.dart';
-import 'package:lingonote/data/repositories/api_blueprint.dart';
+import 'package:lingonote/data/repositories/base_service.dart';
 
-class MockService extends ApiBlueprint {
+class MockService extends BaseService {
   static MockService? _instance;
 
   factory MockService() {
@@ -22,13 +23,14 @@ class MockService extends ApiBlueprint {
           topic: 'title $i',
           contents:
               'This is contents for dummy data, and it looks like card or stuff like that $i',
-          issueDate: '202202271301',
-          fixedDate: '202202271301',
-          userUid: 1234567890123456,
+          issueDate: '20220222',
+          issueDateTime: '202202271301',
+          fixedDateTime: '202202271301',
+          userUid: userUid,
           improved: "",
           improvedType: "",
         );
-        //notes.add(note);
+        notes.add(note);
       }
 
       return notes;
@@ -47,6 +49,11 @@ class MockService extends ApiBlueprint {
 
   @override
   Future<NoteModel>? fetchFirstNote(int userUid) {
+    return null;
+  }
+
+  @override
+  Future<List<ArchiveModel>>? fetchArchive(int userUid) {
     return null;
   }
 }

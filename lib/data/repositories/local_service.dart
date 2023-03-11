@@ -1,8 +1,9 @@
+import 'package:lingonote/data/models/archive_model.dart';
 import 'package:lingonote/data/models/note_model.dart';
-import 'package:lingonote/data/repositories/api_blueprint.dart';
+import 'package:lingonote/data/repositories/base_service.dart';
 import 'package:lingonote/data/repositories/database/database_helper.dart';
 
-class LocalService extends ApiBlueprint {
+class LocalService extends BaseService {
   static LocalService? _instance;
 
   factory LocalService() {
@@ -30,5 +31,10 @@ class LocalService extends ApiBlueprint {
   @override
   Future<NoteModel>? fetchFirstNote(int userUid) {
     return DataBaseHelper().getFristNote(userUid);
+  }
+
+  @override
+  Future<List<ArchiveModel>>? fetchArchive(int userUid) {
+    return DataBaseHelper().getArchive(userUid);
   }
 }

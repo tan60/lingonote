@@ -1,15 +1,16 @@
+import 'package:lingonote/data/models/archive_model.dart';
 import 'package:lingonote/data/models/note_model.dart';
-import 'package:lingonote/data/repositories/api_blueprint.dart';
+import 'package:lingonote/data/repositories/base_service.dart';
 
-class ApiService extends ApiBlueprint {
-  static ApiService? _instance;
+class RemoteService extends BaseService {
+  static RemoteService? _instance;
 
-  factory ApiService() {
-    _instance ??= ApiService._internal();
+  factory RemoteService() {
+    _instance ??= RemoteService._internal();
     return _instance!;
   }
 
-  ApiService._internal();
+  RemoteService._internal();
 
   @override
   Future<List<NoteModel>>? fetchMyNotes(int userUid) {
@@ -28,6 +29,11 @@ class ApiService extends ApiBlueprint {
 
   @override
   Future<NoteModel>? fetchFirstNote(int userUid) {
+    return null;
+  }
+
+  @override
+  Future<List<ArchiveModel>>? fetchArchive(int userUid) {
     return null;
   }
 }
