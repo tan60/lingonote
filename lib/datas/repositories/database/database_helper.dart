@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
-import 'package:lingonote/data/models/archive_model.dart';
-import 'package:lingonote/data/models/note_model.dart';
+import 'package:lingonote/datas/models/achieve_model.dart';
+import 'package:lingonote/datas/models/note_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -144,7 +144,7 @@ class DataBaseHelper {
     })[0];
   }
 
-  Future<List<ArchiveModel>>? getArchive(int userUid) async {
+  Future<List<AchieveModel>>? getArchive(int userUid) async {
     final db = await openDB();
     final format = DateFormat('yyyy-MM-dd');
 
@@ -154,7 +154,7 @@ class DataBaseHelper {
         ''');
 
     return List.generate(maps.length, (i) {
-      return ArchiveModel(
+      return AchieveModel(
         date: maps[i]['date'] as String,
         postedCount: maps[i]['count'] as int,
       );

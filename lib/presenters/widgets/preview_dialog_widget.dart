@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:lingonote/data/models/note_model.dart';
-import 'package:lingonote/managers/string_mgr.dart';
+import 'package:lingonote/domains/entities/note_entitiy.dart';
+import 'package:lingonote/domains/managers/string_mgr.dart';
 import 'package:sizer/sizer.dart';
 
 class PreviewDialogWidget extends StatelessWidget {
-  final NoteModel note;
+  final NoteEntitiy note;
   const PreviewDialogWidget({
     super.key,
     required this.note,
@@ -13,7 +13,7 @@ class PreviewDialogWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DateTime issueServerTime = DateTime.parse(note.issueDateTime);
+    DateTime issueServerTime = DateTime.parse(note.dateTime);
     String formattedTime = DateFormat('yyyy.MM.dd').format(issueServerTime);
     bool isCorrected = note.improvedType == "none";
 

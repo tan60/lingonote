@@ -44,5 +44,8 @@ class LanguageKr extends Languages {
   String get your => "당신의";
 
   @override
-  String get archivement => "성취 기록";
+  String get accomplishments => "성취 기록";
+
+  @override
+  String get encourage => "매일 작문 도전을 응원합니다!";
 }

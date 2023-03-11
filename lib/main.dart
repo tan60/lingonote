@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:lingonote/managers/pref_mgr.dart';
-import 'package:lingonote/screen/home_screen.dart';
-import 'package:lingonote/themes/my_themes.dart';
+import 'package:lingonote/domains/managers/pref_mgr.dart';
+import 'package:lingonote/presenters/screen/home_screen.dart';
+import 'package:lingonote/assets/themes/my_themes.dart';
 import 'package:sizer/sizer.dart';
 //import 'package:lingonote/screen/home_screen.dart';
 

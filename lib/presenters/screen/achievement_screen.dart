@@ -2,30 +2,30 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:lingonote/data/models/archive_model.dart';
-import 'package:lingonote/data/models/note_model.dart';
-import 'package:lingonote/data/repositories/repo.dart';
-import 'package:lingonote/data/repositories/local_service.dart';
-import 'package:lingonote/managers/pref_mgr.dart';
-import 'package:lingonote/managers/string_mgr.dart';
+import 'package:lingonote/datas/models/achieve_model.dart';
+import 'package:lingonote/datas/repositories/repo.dart';
+import 'package:lingonote/datas/repositories/local_service.dart';
+import 'package:lingonote/domains/entities/note_entitiy.dart';
+import 'package:lingonote/domains/managers/pref_mgr.dart';
+import 'package:lingonote/domains/managers/string_mgr.dart';
+import 'package:lingonote/domains/usecases/achieve_usecase.dart';
+import 'package:lingonote/presenters/screen/setting_screen.dart';
 import 'package:sizer/sizer.dart';
 
-class RecordScreen extends StatefulWidget {
-  const RecordScreen({super.key});
+class AchievementScreen extends StatefulWidget {
+  const AchievementScreen({super.key});
 
   @override
-  State<RecordScreen> createState() => _RecordScreenState();
+  State<AchievementScreen> createState() => _AchievementScreen();
 }
 
-class _RecordScreenState extends State<RecordScreen> {
-  Future<int> totalCount = Repo(LocalService())
-      .fetchTotalPostedCount(PrefMgr.prefs.getInt(PrefMgr.uid) ?? -1);
+class _AchievementScreen extends State<AchievementScreen> {
+  Future<int> totalCount = AchieveUsecase().fetchTotalPostedCount();
 
-  Future<NoteModel>? firstNote = Repo(LocalService())
-      .fetchFirstNote(PrefMgr.prefs.getInt(PrefMgr.uid) ?? -1);
+  Future<NoteEntitiy>? firstNote = AchieveUsecase().fetchFirstNote();
 
-  Future<List<ArchiveModel>>? archives = Repo(LocalService())
-      .fetchArchive(PrefMgr.prefs.getInt(PrefMgr.uid) ?? -1);
+  Future<List<AchieveModel>>? archives = Repo(LocalService())
+      .fetchAcheive(PrefMgr.prefs.getInt(PrefMgr.uid) ?? -1);
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +41,7 @@ class _RecordScreenState extends State<RecordScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
@@ -50,7 +51,7 @@ class _RecordScreenState extends State<RecordScreen> {
                       Text(
                         StringMgr().your,
                         style: TextStyle(
-                            fontSize: 24.sp,
+                            fontSize: 22.sp,
                             fontWeight: FontWeight.w200,
                             color: Theme.of(context)
                                 .textTheme
@@ -58,9 +59,9 @@ class _RecordScreenState extends State<RecordScreen> {
                                 ?.color),
                       ),
                       Text(
-                        StringMgr().archivement,
+                        StringMgr().accomplishments,
                         style: TextStyle(
-                            fontSize: 24.sp,
+                            fontSize: 22.sp,
                             fontWeight: FontWeight.w400,
                             color: Theme.of(context)
                                 .textTheme
@@ -72,10 +73,23 @@ class _RecordScreenState extends State<RecordScreen> {
                 ),
                 Ink(
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SettingScreen(),
+                          fullscreenDialog: true,
+                          allowSnapshotting: true,
+                        ),
+                      ).then(
+                        (value) {
+                          //fetchNotes();
+                        },
+                      );
+                    },
                     child: Container(
                       alignment: Alignment.center,
-                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+                      padding: const EdgeInsets.all(10),
                       child: SizedBox(
                         width: 32,
                         height: 32,
@@ -109,7 +123,7 @@ class _RecordScreenState extends State<RecordScreen> {
                           if (snapshot.hasData) {
                             DateTime nowDateTime = DateTime.now();
                             DateTime firstPostTime =
-                                DateTime.parse(snapshot.data!.issueDateTime);
+                                DateTime.parse(snapshot.data!.dateTime);
 
                             int days = nowDateTime.day - firstPostTime.day;
 
@@ -123,42 +137,13 @@ class _RecordScreenState extends State<RecordScreen> {
                                       ?.color),
                             );
                           } else {
-                            return Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Icon(
-                                  Icons.auto_graph,
-                                  size: 100,
-                                  color: Theme.of(context).hintColor,
-                                ),
-                                const SizedBox(
-                                  height: 24,
-                                ),
-                                Text(
-                                  '당신의 최고 성취를 이뤄보세요.',
-                                  style: TextStyle(
-                                      fontSize: 18.sp,
-                                      fontWeight: FontWeight.w300,
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .displayLarge
-                                          ?.color),
-                                ),
-                              ],
-                            );
+                            return const EncourageWidget();
                           }
                         },
                       );
                     }
 
-                    return Text(
-                      '당신의 최고 성취를 이뤄보세요.',
-                      style: TextStyle(
-                          fontSize: 20.sp,
-                          fontWeight: FontWeight.w200,
-                          color:
-                              Theme.of(context).textTheme.displayLarge?.color),
-                    );
+                    return const EncourageWidget();
                   },
                 ),
               ),
@@ -178,6 +163,36 @@ class _RecordScreenState extends State<RecordScreen> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class EncourageWidget extends StatelessWidget {
+  const EncourageWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Icon(
+          Icons.auto_graph,
+          size: 80,
+          color: Theme.of(context).hintColor,
+        ),
+        const SizedBox(
+          height: 24,
+        ),
+        Text(
+          StringMgr().encourage,
+          style: TextStyle(
+              fontSize: 18.sp,
+              fontWeight: FontWeight.w300,
+              color: Theme.of(context).textTheme.displayLarge?.color),
+        ),
+      ],
     );
   }
 }

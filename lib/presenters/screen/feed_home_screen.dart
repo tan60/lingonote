@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:lingonote/data/models/note_model.dart';
-import 'package:lingonote/data/repositories/repo.dart';
-import 'package:lingonote/data/repositories/local_service.dart';
-import 'package:lingonote/managers/pref_mgr.dart';
-import 'package:lingonote/managers/string_mgr.dart';
-import 'package:lingonote/screen/edit_note_screen.dart';
-import 'package:lingonote/widgets/note_widget.dart';
+import 'package:lingonote/domains/entities/note_entitiy.dart';
+import 'package:lingonote/domains/managers/string_mgr.dart';
+import 'package:lingonote/domains/usecases/note_usecase.dart';
+import 'package:lingonote/presenters/screen/edit_note_screen.dart';
+import 'package:lingonote/presenters/widgets/note_widget.dart';
 import 'package:sizer/sizer.dart';
 
 class FeedHomeScreen extends StatefulWidget {
@@ -18,13 +16,11 @@ class FeedHomeScreen extends StatefulWidget {
 }
 
 class FeedHomeScreenState extends State<FeedHomeScreen> {
-  Future<List<NoteModel>>? notes = Repo(LocalService())
-      .fetchMyNotes(PrefMgr.prefs.getInt(PrefMgr.uid) ?? -1);
+  Future<List<NoteEntitiy>>? notes = NoteUsecase().fetchMyNotes();
 
   void fetchNotes() {
     setState(() {
-      notes = Repo(LocalService())
-          .fetchMyNotes(PrefMgr.prefs.getInt(PrefMgr.uid) ?? -1);
+      notes = NoteUsecase().fetchMyNotes();
     });
   }
 
@@ -61,7 +57,7 @@ class FeedHomeScreenState extends State<FeedHomeScreen> {
     );
   }
 
-  ListView buildNoteList(AsyncSnapshot<List<NoteModel>> snapshot) {
+  ListView buildNoteList(AsyncSnapshot<List<NoteEntitiy>> snapshot) {
     return ListView.separated(
       scrollDirection: Axis.vertical,
       itemCount: snapshot.data!.length,
@@ -71,7 +67,7 @@ class FeedHomeScreenState extends State<FeedHomeScreen> {
       ),
       itemBuilder: (context, index) {
         var note = snapshot.data![index];
-        DateTime issueServerTime = DateTime.parse(note.issueDateTime);
+        DateTime issueServerTime = DateTime.parse(note.dateTime);
         String formattedTime = DateFormat('yyyy.MM.dd').format(issueServerTime);
 
         return Note(

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lingonote/managers/string_mgr.dart';
+import 'package:lingonote/domains/managers/string_mgr.dart';
 import 'package:sizer/sizer.dart';
 
 class Note extends StatelessWidget {

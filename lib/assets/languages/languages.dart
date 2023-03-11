@@ -33,5 +33,7 @@ abstract class Languages {
 
   String get your;
 
-  String get archivement;
+  String get accomplishments;
+
+  String get encourage;
 }

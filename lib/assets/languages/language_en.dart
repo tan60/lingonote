@@ -44,5 +44,9 @@ class LanguageEn extends Languages {
   String get your => "Your";
 
   @override
-  String get archivement => "Archivement";
+  String get accomplishments => "Accomplishments";
+
+  @override
+  String get encourage =>
+      "Encouraging you to take on dayily writing channlenges!";
 }

@@ -70,5 +70,8 @@ class StringMgr extends Languages {
   String get your => localeLanguage.your;
 
   @override
-  String get archivement => localeLanguage.archivement;
+  String get accomplishments => localeLanguage.accomplishments;
+
+  @override
+  String get encourage => localeLanguage.encourage;
 }

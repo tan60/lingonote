@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:lingonote/data/repositories/database/database_helper.dart';
-import 'package:lingonote/managers/pref_mgr.dart';
-import 'package:lingonote/screen/edit_note_screen.dart';
-import 'package:lingonote/screen/feed_home_screen.dart';
-import 'package:lingonote/screen/record_screen.dart';
+import 'package:lingonote/datas/repositories/database/database_helper.dart';
+import 'package:lingonote/domains/managers/pref_mgr.dart';
+import 'package:lingonote/presenters/screen/edit_note_screen.dart';
+import 'package:lingonote/presenters/screen/feed_home_screen.dart';
+import 'package:lingonote/presenters/screen/achievement_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -32,10 +32,8 @@ class _HomeScreenState extends State<HomeScreen> {
   void buildPages() {
     pages = [
       FeedHomeScreen(key: _feedHomeWidgetKey),
-      const RecordScreen(),
-      const RecordScreen(),
-      const RecordScreen(),
-      const RecordScreen(),
+      const AchievementScreen(),
+      const AchievementScreen(),
     ];
   }
 

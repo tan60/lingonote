@@ -1,6 +1,6 @@
-import 'package:lingonote/data/models/archive_model.dart';
-import 'package:lingonote/data/models/note_model.dart';
-import 'package:lingonote/data/repositories/base_service.dart';
+import 'package:lingonote/datas/models/achieve_model.dart';
+import 'package:lingonote/datas/models/note_model.dart';
+import 'package:lingonote/datas/repositories/base_service.dart';
 
 class Repo extends BaseService {
   final BaseService service;
@@ -38,7 +38,7 @@ class Repo extends BaseService {
   }
 
   @override
-  Future<List<ArchiveModel>>? fetchArchive(int userUid) async {
-    return await service.fetchArchive(userUid)!;
+  Future<List<AchieveModel>>? fetchAcheive(int userUid) async {
+    return await service.fetchAcheive(userUid)!;
   }
 }

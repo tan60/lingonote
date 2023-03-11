@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:lingonote/data/models/note_model.dart';
-import 'package:lingonote/data/repositories/repo.dart';
-import 'package:lingonote/data/repositories/local_service.dart';
-import 'package:lingonote/managers/pref_mgr.dart';
-import 'package:lingonote/managers/string_mgr.dart';
-import 'package:lingonote/themes/my_themes.dart';
-import 'package:lingonote/widgets/edit_text_widget.dart';
-import 'package:lingonote/widgets/preview_dialog_widget.dart';
-import 'package:lingonote/widgets/rounded_icon_button_widget.dart';
+import 'package:lingonote/domains/entities/note_entitiy.dart';
+import 'package:lingonote/domains/managers/pref_mgr.dart';
+import 'package:lingonote/domains/managers/string_mgr.dart';
+import 'package:lingonote/domains/usecases/edit_usecase.dart';
+import 'package:lingonote/assets/themes/my_themes.dart';
+import 'package:lingonote/presenters/widgets/edit_text_widget.dart';
+import 'package:lingonote/presenters/widgets/preview_dialog_widget.dart';
+import 'package:lingonote/presenters/widgets/rounded_icon_button_widget.dart';
 import 'package:sizer/sizer.dart';
 
 class EditNoteScreen extends StatefulWidget {
@@ -85,10 +84,10 @@ class _EditNoteScreenState extends State<EditNoteScreen>
     });
   }
 
-  void _showPostingResultAndPop(NoteModel? note) {
+  void _showPostingResultAndPop(NoteEntitiy? note) {
     _setPostingState(false);
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text('${note?.postNo} 번째 노트가 작성되었습니다.'),
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      content: Text('작성 완료! AI로 향상된 표현을 배워보세요.'),
     ));
     Navigator.pop(context);
   }
@@ -232,34 +231,28 @@ class _EditNoteScreenState extends State<EditNoteScreen>
     );
   }
 
-  NoteModel _buildNote() {
+  NoteEntitiy _buildNote() {
     String topic = _topicTextEditingController.text;
     String contents = _contentsTextEditingController.text;
     String improved = "";
     String improvedType = "none";
     var now = DateTime.now();
-    String issueDate = DateFormat('yyyy-MM-dd').format(now);
     String issueDateTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
-    String fixedDataTime = issueDateTime;
 
-    return NoteModel(
+    return NoteEntitiy(
       topic: topic,
       contents: contents,
-      issueDate: issueDate,
-      issueDateTime: issueDateTime,
-      fixedDateTime: fixedDataTime,
-      userUid: userUid,
+      dateTime: issueDateTime,
       improved: improved,
       improvedType: improvedType,
     );
   }
 
-  Future<NoteModel>? _postNote(BuildContext context, NoteModel note) async {
-    NoteModel resultNote = await Repo(LocalService()).postNote(note);
-    return resultNote;
+  Future<NoteEntitiy>? _postNote(BuildContext context, NoteEntitiy note) async {
+    return await EditUsecase().postNote(note);
   }
 
-  Future<void> _showPreviewDialog(NoteModel note) async {
+  Future<void> _showPreviewDialog(NoteEntitiy note) async {
     await showDialog(
       context: context,
       builder: (context) {

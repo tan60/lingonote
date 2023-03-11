@@ -1,13 +1,13 @@
-class ArchiveModel {
+class AchieveModel {
   late final String date;
   late final int postedCount;
 
-  ArchiveModel({
+  AchieveModel({
     required this.date,
     required this.postedCount,
   });
 
-  ArchiveModel.fromJson(Map<String, dynamic> json)
+  AchieveModel.fromJson(Map<String, dynamic> json)
       : date = json['date'],
         postedCount = json['postedCount'];
 }
