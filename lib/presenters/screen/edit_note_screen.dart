@@ -4,7 +4,6 @@ import 'package:lingonote/domains/entities/note_entitiy.dart';
 import 'package:lingonote/domains/managers/pref_mgr.dart';
 import 'package:lingonote/domains/managers/string_mgr.dart';
 import 'package:lingonote/domains/usecases/edit_usecase.dart';
-import 'package:lingonote/assets/themes/my_themes.dart';
 import 'package:lingonote/presenters/widgets/edit_text_widget.dart';
 import 'package:lingonote/presenters/widgets/preview_dialog_widget.dart';
 import 'package:lingonote/presenters/widgets/rounded_icon_button_widget.dart';
@@ -22,7 +21,6 @@ class EditNoteScreen extends StatefulWidget {
 class _EditNoteScreenState extends State<EditNoteScreen>
     with WidgetsBindingObserver {
   late int userUid;
-  late Brightness _brightness;
   late ScrollController _scrollController;
   late TextEditingController _topicTextEditingController;
   late TextEditingController _contentsTextEditingController;
@@ -37,8 +35,6 @@ class _EditNoteScreenState extends State<EditNoteScreen>
     _contentsTextEditingController = TextEditingController();
 
     WidgetsBinding.instance.addObserver(this);
-    _brightness = WidgetsBinding.instance.window.platformBrightness;
-
     _getUid();
 
     super.initState();
@@ -60,9 +56,7 @@ class _EditNoteScreenState extends State<EditNoteScreen>
   @override
   void didChangePlatformBrightness() {
     if (mounted) {
-      setState(() {
-        _brightness = WidgetsBinding.instance.window.platformBrightness;
-      });
+      setState(() {});
     }
   }
 
@@ -95,9 +89,7 @@ class _EditNoteScreenState extends State<EditNoteScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: _brightness == Brightness.light
-          ? MyThemes.getThemeFromKey(MyThemeKeys.light).primaryColor
-          : MyThemes.getThemeFromKey(MyThemeKeys.dark).canvasColor,
+      backgroundColor: Theme.of(context).primaryColorLight,
       appBar: AppBar(
         elevation: 0,
         toolbarHeight: 82,

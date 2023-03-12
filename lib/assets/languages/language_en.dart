@@ -2,6 +2,9 @@ import 'package:lingonote/assets/languages/languages.dart';
 
 class LanguageEn extends Languages {
   @override
+  String get appName => 'LingoNote';
+
+  @override
   String get homeFeedGuide => "하루 영작";
 
   @override
@@ -49,4 +52,37 @@ class LanguageEn extends Languages {
   @override
   String get encourage =>
       "Encouraging you to take on dayily writing channlenges!";
+
+  @override
+  String get settings => 'Settings';
+
+  @override
+  String get languageSetTitle => 'Menu Language';
+
+  @override
+  String get languageKr => 'Korean';
+
+  @override
+  String get languageEn => 'Engliash';
+
+  @override
+  String get brightThemeSetTitle => 'Color Theme';
+
+  @override
+  String get brightSystem => 'System';
+
+  @override
+  String get brightLight => 'Light';
+
+  @override
+  String get brightDark => 'Dark';
+
+  @override
+  String get rateApp => 'Rate LingoNote 5-stars';
+
+  @override
+  String get shareApp => 'Share LingoNote';
+
+  @override
+  String get questionDeveloper => 'Contact the developer';
 }

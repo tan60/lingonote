@@ -28,6 +28,9 @@ class StringMgr extends Languages {
   }
 
   @override
+  String get appName => localeLanguage.appName;
+
+  @override
   String get homeFeedGuide => localeLanguage.homeFeedGuide;
 
   @override
@@ -74,4 +77,37 @@ class StringMgr extends Languages {
 
   @override
   String get encourage => localeLanguage.encourage;
+
+  @override
+  String get settings => localeLanguage.settings;
+
+  @override
+  String get languageSetTitle => localeLanguage.languageSetTitle;
+
+  @override
+  String get languageKr => localeLanguage.languageKr;
+
+  @override
+  String get languageEn => localeLanguage.languageEn;
+
+  @override
+  String get brightThemeSetTitle => localeLanguage.brightThemeSetTitle;
+
+  @override
+  String get brightSystem => localeLanguage.brightSystem;
+
+  @override
+  String get brightLight => localeLanguage.brightLight;
+
+  @override
+  String get brightDark => localeLanguage.brightDark;
+
+  @override
+  String get rateApp => localeLanguage.rateApp;
+
+  @override
+  String get shareApp => localeLanguage.shareApp;
+
+  @override
+  String get questionDeveloper => localeLanguage.questionDeveloper;
 }

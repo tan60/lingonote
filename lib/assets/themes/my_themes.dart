@@ -5,7 +5,7 @@ enum MyThemeKeys { light, dark }
 class MyThemes {
   static final ThemeData lightTheme = ThemeData(
     primaryColor: const Color(0xFFF98A9B),
-    primaryColorLight: const Color(0xFFFBB9C3),
+    primaryColorLight: const Color(0xFFF98A9B),
     primaryColorDark: const Color(0xFFF98A9B),
     canvasColor: const Color(0xFFFAFAFA),
     cardColor: const Color(0xFFFFFFFF),
@@ -47,7 +47,7 @@ class MyThemes {
 
   static final ThemeData darkTheme = ThemeData(
     primaryColor: const Color(0xFFF98A9B),
-    primaryColorLight: const Color(0xFFFBB9C3),
+    primaryColorLight: const Color(0xFF303030),
     primaryColorDark: const Color(0xFFF98A9B),
     canvasColor: const Color(0xFF303030),
     cardColor: const Color(0xFF424242),

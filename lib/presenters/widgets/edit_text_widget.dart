@@ -21,6 +21,7 @@ class EditText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    RegExp denyExp = RegExp(r"[ㄱ-ㅎㅏ-ㅣ가-힣]");
     return TextField(
       controller: textEditingController,
       onTap: gestureTapCallback,
@@ -31,8 +32,7 @@ class EditText extends StatelessWidget {
       cursorColor: Colors.white,
       keyboardType: TextInputType.multiline,
       inputFormatters: [
-        FilteringTextInputFormatter.allow(
-            RegExp(r'[a-zA-Z0-9\s\n!@#$%^&*(),.?":{}|<>]')),
+        FilteringTextInputFormatter.deny(denyExp),
       ],
       minLines: 1,
       maxLines: maxLines,

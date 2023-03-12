@@ -5,6 +5,8 @@ abstract class Languages {
     return Localizations.of<Languages>(context, Languages)!;
   }
 
+  String get appName;
+
   String get homeFeedGuide;
 
   String get homeFeedSubGuide;
@@ -36,4 +38,26 @@ abstract class Languages {
   String get accomplishments;
 
   String get encourage;
+
+  String get settings;
+
+  String get languageSetTitle;
+
+  String get languageKr;
+
+  String get languageEn;
+
+  String get brightThemeSetTitle;
+
+  String get brightSystem;
+
+  String get brightLight;
+
+  String get brightDark;
+
+  String get rateApp;
+
+  String get shareApp;
+
+  String get questionDeveloper;
 }
