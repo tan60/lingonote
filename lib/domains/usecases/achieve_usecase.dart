@@ -39,6 +39,15 @@ class AchieveUsecase {
     );
   }
 
+  Future<int> fetchTotalDays() async {
+    NoteModel note = await service.fetchFirstNote(userUid)!;
+
+    DateTime nowDateTime = DateTime.now();
+    DateTime firstPostTime = DateTime.parse(note.issueDate);
+
+    return nowDateTime.day - firstPostTime.day + 1;
+  }
+
   Future<List<AchieveEntity>>? fetchAchieve() async {
     List<AchieveModel> achieves = await service.fetchAcheive(userUid)!;
 

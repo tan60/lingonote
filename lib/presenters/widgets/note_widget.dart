@@ -4,17 +4,22 @@ import 'package:sizer/sizer.dart';
 
 class Note extends StatelessWidget {
   final String title, contents, date, improvedType;
-  const Note(
-      {super.key,
-      required this.title,
-      required this.contents,
-      required this.date,
-      required this.improvedType});
+  final Function? onTapItem;
+  const Note({
+    super.key,
+    required this.title,
+    required this.contents,
+    required this.date,
+    required this.improvedType,
+    required this.onTapItem,
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        onTapItem!();
+      },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 25),
         padding: const EdgeInsets.all(30),

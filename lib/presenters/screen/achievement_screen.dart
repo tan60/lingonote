@@ -5,7 +5,6 @@ import 'package:intl/intl.dart';
 import 'package:lingonote/datas/models/achieve_model.dart';
 import 'package:lingonote/datas/repositories/repo.dart';
 import 'package:lingonote/datas/repositories/local_service.dart';
-import 'package:lingonote/domains/entities/note_entitiy.dart';
 import 'package:lingonote/domains/managers/pref_mgr.dart';
 import 'package:lingonote/domains/managers/string_mgr.dart';
 import 'package:lingonote/domains/usecases/achieve_usecase.dart';
@@ -21,8 +20,7 @@ class AchievementScreen extends StatefulWidget {
 
 class _AchievementScreen extends State<AchievementScreen> {
   Future<int> totalCount = AchieveUsecase().fetchTotalPostedCount();
-
-  Future<NoteEntitiy>? firstNote = AchieveUsecase().fetchFirstNote();
+  Future<int> totalDays = AchieveUsecase().fetchTotalDays();
 
   Future<List<AchieveModel>>? archives = Repo(LocalService())
       .fetchAcheive(PrefMgr.prefs.getInt(PrefMgr.uid) ?? -1);
@@ -35,7 +33,7 @@ class _AchievementScreen extends State<AchievementScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(
-            height: 80,
+            height: 70,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -118,17 +116,11 @@ class _AchievementScreen extends State<AchievementScreen> {
                       int totalCount = snapshot.data!;
 
                       return FutureBuilder(
-                        future: firstNote,
+                        future: totalDays,
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
-                            DateTime nowDateTime = DateTime.now();
-                            DateTime firstPostTime =
-                                DateTime.parse(snapshot.data!.dateTime);
-
-                            int days = nowDateTime.day - firstPostTime.day;
-
                             return Text(
-                              '"$days일 동안 총 $totalCount개의 영문을 작성했습니다."',
+                              '"${snapshot.data}일간 총 $totalCount개의 영문을 작성했습니다."',
                               style: TextStyle(
                                   fontSize: 20.sp,
                                   color: Theme.of(context)

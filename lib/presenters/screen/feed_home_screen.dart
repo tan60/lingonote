@@ -5,6 +5,7 @@ import 'package:lingonote/domains/managers/string_mgr.dart';
 import 'package:lingonote/domains/usecases/note_usecase.dart';
 import 'package:lingonote/presenters/screen/edit_note_screen.dart';
 import 'package:lingonote/presenters/widgets/note_widget.dart';
+import 'package:lingonote/presenters/widgets/preview_dialog_widget.dart';
 import 'package:sizer/sizer.dart';
 
 class FeedHomeScreen extends StatefulWidget {
@@ -28,7 +29,7 @@ class FeedHomeScreenState extends State<FeedHomeScreen> {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(
-        top: 50,
+        top: 70,
       ),
       child: FutureBuilder(
         future: notes,
@@ -75,6 +76,9 @@ class FeedHomeScreenState extends State<FeedHomeScreen> {
           contents: note.contents,
           date: formattedTime,
           improvedType: note.improvedType,
+          onTapItem: () {
+            _showPreviewDialog(note);
+          },
         );
       },
       separatorBuilder: (context, index) => const SizedBox(
@@ -191,6 +195,15 @@ class FeedHomeScreenState extends State<FeedHomeScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> _showPreviewDialog(NoteEntitiy note) async {
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return PreviewDialogWidget(note: note);
+      },
     );
   }
 }
