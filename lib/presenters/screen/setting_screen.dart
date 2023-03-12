@@ -145,7 +145,7 @@ class _SettingScreenState extends State<SettingScreen>
       ),
       body: SingleChildScrollView(
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 30),
+          padding: const EdgeInsets.symmetric(horizontal: 25),
           child: Column(
             children: [
               _buildLanguageSetting(context),
