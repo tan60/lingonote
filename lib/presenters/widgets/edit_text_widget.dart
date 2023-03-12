@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:sizer/sizer.dart';
 
 class EditText extends StatelessWidget {
@@ -21,7 +20,7 @@ class EditText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    RegExp denyExp = RegExp(r"[ㄱ-ㅎㅏ-ㅣ가-힣]");
+    //RegExp denyExp = RegExp(r"[ㄱ-ㅎㅏ-ㅣ가-힣]");
     return TextField(
       controller: textEditingController,
       onTap: gestureTapCallback,
@@ -31,9 +30,9 @@ class EditText extends StatelessWidget {
       ),
       cursorColor: Colors.white,
       keyboardType: TextInputType.multiline,
-      inputFormatters: [
+      /*inputFormatters: [
         FilteringTextInputFormatter.deny(denyExp),
-      ],
+      ],*/
       minLines: 1,
       maxLines: maxLines,
       onChanged: onChanged,
