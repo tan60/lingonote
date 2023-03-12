@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lingonote/domains/managers/pref_mgr.dart';
 import 'package:lingonote/presenters/screen/home_screen.dart';
 import 'package:lingonote/assets/themes/my_themes.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 //import 'package:lingonote/screen/home_screen.dart';
 
@@ -11,33 +12,56 @@ void main() {
 
 void initApp() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(App());
+  runApp(const App());
 }
 
 class App extends StatefulWidget {
-  App({super.key}) {
-    //_initialize();
-  }
+  const App({super.key});
+
+  static ValueNotifier<Brightness> brightnessNotifier =
+      ValueNotifier(Brightness.light);
 
   @override
   State<App> createState() => _AppState();
 }
 
 class _AppState extends State<App> with WidgetsBindingObserver {
-  late final Future<bool> _isInitialized = _initialize();
-
+  late final Future<bool> _isInitialized = _initializePreference();
   late Brightness _brightness;
 
-  Future<bool> _initialize() async {
-    await PrefMgr.initPref();
+  Future<bool> _initializePreference() async {
+    SharedPreferences? prefs = await PrefMgr.initPref();
+
+    _initBrightness();
     return true;
+  }
+
+  void _initBrightness() async {
+    setState(() {
+      String userBrightness =
+          PrefMgr.prefs.getString(PrefMgr.theme) ?? 'system';
+
+      if (userBrightness == 'system') {
+        _brightness = WidgetsBinding.instance.window.platformBrightness;
+      } else {
+        if (userBrightness == 'light') {
+          _brightness = Brightness.light;
+        } else if (userBrightness == 'dark') {
+          _brightness = Brightness.dark;
+        }
+      }
+
+      App.brightnessNotifier.value = _brightness;
+    });
   }
 
   @override
   void initState() {
-    _initialize();
+    _initializePreference();
+
     WidgetsBinding.instance.addObserver(this);
     _brightness = WidgetsBinding.instance.window.platformBrightness;
+
     super.initState();
   }
 
@@ -50,9 +74,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   @override
   void didChangePlatformBrightness() {
     if (mounted) {
-      setState(() {
-        _brightness = WidgetsBinding.instance.window.platformBrightness;
-      });
+      _initBrightness();
     }
     super.didChangePlatformBrightness();
   }
@@ -61,22 +83,27 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return Sizer(
       builder: (context, orientation, deviceType) {
-        return MaterialApp(
-          theme: _brightness == Brightness.light
-              ? MyThemes.getThemeFromKey(MyThemeKeys.light)
-              : MyThemes.getThemeFromKey(MyThemeKeys.dark),
-          title: 'Welcome to LingoNote',
-          home: FutureBuilder(
-            future: _isInitialized,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return const HomeScreen();
-              } else {
-                return Container(); //show splash
-              }
-            },
-          ),
-          //home: const EditNote(),
+        return ValueListenableBuilder<Brightness>(
+          valueListenable: App.brightnessNotifier,
+          builder: (context, brightness, child) {
+            return MaterialApp(
+              theme: brightness == Brightness.light
+                  ? MyThemes.getThemeFromKey(MyThemeKeys.light)
+                  : MyThemes.getThemeFromKey(MyThemeKeys.dark),
+              title: 'Welcome to LingoNote',
+              home: FutureBuilder(
+                future: _isInitialized,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return const HomeScreen();
+                  } else {
+                    return Container(); //show splash
+                  }
+                },
+              ),
+              //home: const EditNote(),
+            );
+          },
         );
       },
     );
