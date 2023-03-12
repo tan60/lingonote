@@ -68,6 +68,7 @@ class DataBaseHelper {
         'post_topic': note.topic,
         'post_contents': note.contents,
         'post_improved': note.improved,
+        'post_issue_date': note.issueDate,
         'post_issue_date_time': note.issueDateTime, //'2022-01-01 00:00:00',
         'post_fixed_date_time': note.issueDateTime,
         'post_improved_type': note.improvedType,
