@@ -36,6 +36,11 @@ class _EditNoteScreenState extends State<EditNoteScreen>
     _topicTextEditingController = TextEditingController();
     _contentsTextEditingController = TextEditingController();
 
+    if (widget.currentNote != null) {
+      _topicTextEditingController.text = widget.currentNote!.topic;
+      _contentsTextEditingController.text = widget.currentNote!.contents;
+    }
+
     WidgetsBinding.instance.addObserver(this);
     _getUid();
 
@@ -144,6 +149,7 @@ class _EditNoteScreenState extends State<EditNoteScreen>
                       borderRadius: BorderRadius.circular(18),
                     ),
                     child: EditText(
+                      existText: widget.currentNote?.topic,
                       labelText: StringMgr().editTopicLabel,
                       hintText: StringMgr().editTopicHint,
                       maxLines: 3,
@@ -167,6 +173,7 @@ class _EditNoteScreenState extends State<EditNoteScreen>
                       borderRadius: BorderRadius.circular(18),
                     ),
                     child: EditText(
+                      existText: widget.currentNote?.contents,
                       labelText: StringMgr().editContentLabel,
                       hintText: StringMgr().editContentHint,
                       maxLines: null,
@@ -215,7 +222,8 @@ class _EditNoteScreenState extends State<EditNoteScreen>
               onTap: () async {
                 _setPostingState(true);
                 _showPostingResultAndPop(
-                    await _postNote(context, _buildNote()));
+                  await _postNote(context, _buildNote()),
+                );
                 /* Future.delayed(const Duration(milliseconds: 2000), () {); */
               },
             ),
@@ -226,6 +234,7 @@ class _EditNoteScreenState extends State<EditNoteScreen>
   }
 
   NoteEntitiy _buildNote() {
+    int? postNo = widget.currentNote?.postNo;
     String topic = _topicTextEditingController.text;
     String contents = _contentsTextEditingController.text;
     String improved = "";
@@ -234,6 +243,7 @@ class _EditNoteScreenState extends State<EditNoteScreen>
     String issueDateTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
 
     return NoteEntitiy(
+      postNo: postNo,
       topic: topic,
       contents: contents,
       dateTime: issueDateTime,
@@ -243,7 +253,7 @@ class _EditNoteScreenState extends State<EditNoteScreen>
   }
 
   Future<NoteEntitiy>? _postNote(BuildContext context, NoteEntitiy note) async {
-    return await EditUsecase().postNote(note);
+    return await EditUsecase().postOrUpdateNote(note);
   }
 
   Future<void> _showPreviewDialog(NoteEntitiy note) async {

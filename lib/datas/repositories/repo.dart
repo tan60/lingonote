@@ -28,6 +28,11 @@ class Repo extends BaseService {
   }
 
   @override
+  Future? updateNote(NoteModel note) async {
+    return await service.updateNote(note);
+  }
+
+  @override
   Future<int> fetchTotalPostedCount(int userUid) async {
     return await service.fetchTotalPostedCount(userUid);
   }

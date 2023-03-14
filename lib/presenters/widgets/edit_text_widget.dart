@@ -3,6 +3,7 @@ import 'package:sizer/sizer.dart';
 
 class EditText extends StatelessWidget {
   final String labelText, hintText;
+  final String? existText;
   final int? maxLines;
   final GestureTapCallback? gestureTapCallback;
   final TextEditingController? textEditingController;
@@ -10,6 +11,7 @@ class EditText extends StatelessWidget {
 
   const EditText({
     super.key,
+    required this.existText,
     required this.labelText,
     required this.hintText,
     required this.maxLines,

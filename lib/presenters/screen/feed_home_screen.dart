@@ -199,7 +199,7 @@ class FeedHomeScreenState extends State<FeedHomeScreen> {
   }
 
   Future<void> _showPreviewDialog(NoteEntitiy note) async {
-    await showDialog(
+    final result = await showDialog(
       context: context,
       builder: (context) {
         return PreviewDialogWidget(
@@ -208,5 +208,9 @@ class FeedHomeScreenState extends State<FeedHomeScreen> {
         );
       },
     );
+
+    if (result != null && result) {
+      fetchNotes();
+    }
   }
 }

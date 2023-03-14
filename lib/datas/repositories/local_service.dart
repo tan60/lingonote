@@ -24,6 +24,11 @@ class LocalService extends BaseService {
   }
 
   @override
+  Future? updateNote(NoteModel note) {
+    return DataBaseHelper().updateNote(note);
+  }
+
+  @override
   Future<int> fetchTotalPostedCount(int userUid) async {
     return DataBaseHelper().getTotalCountNotes();
   }

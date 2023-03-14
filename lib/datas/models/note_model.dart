@@ -8,7 +8,7 @@ class NoteModel {
       improvedType;
   late final int userUid;
   late List<String> tags;
-  late int postNo;
+  late int? postNo;
 
   NoteModel({
     required this.topic,
@@ -19,6 +19,7 @@ class NoteModel {
     required this.improved,
     required this.improvedType,
     required this.userUid,
+    required this.postNo,
   });
 
   NoteModel.fromJson(Map<String, dynamic> json)

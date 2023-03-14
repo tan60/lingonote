@@ -20,6 +20,7 @@ class MockService extends BaseService {
 
       for (int i = 0; i < 15; i++) {
         NoteModel note = NoteModel(
+          postNo: null,
           topic: 'title $i',
           contents:
               'This is contents for dummy data, and it looks like card or stuff like that $i',
@@ -39,6 +40,11 @@ class MockService extends BaseService {
 
   @override
   Future? postNote(NoteModel note) {
+    return null;
+  }
+
+  @override
+  Future? updateNote(NoteModel note) {
     return null;
   }
 

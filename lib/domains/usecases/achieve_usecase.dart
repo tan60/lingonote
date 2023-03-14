@@ -31,6 +31,7 @@ class AchieveUsecase {
     NoteModel note = await service.fetchFirstNote(userUid)!;
 
     return NoteEntitiy(
+      postNo: note.postNo,
       topic: note.topic,
       contents: note.contents,
       dateTime: note.issueDateTime,

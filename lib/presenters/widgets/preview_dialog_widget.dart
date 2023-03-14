@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lingonote/domains/entities/note_entitiy.dart';
 import 'package:lingonote/domains/managers/string_mgr.dart';
+import 'package:lingonote/presenters/screen/edit_note_screen.dart';
 import 'package:sizer/sizer.dart';
 
 class PreviewDialogWidget extends StatelessWidget {
@@ -60,8 +61,18 @@ class PreviewDialogWidget extends StatelessWidget {
                                         color: Theme.of(context).focusColor,
                                         iconSize: 32,
                                         onPressed: () {
-                                          //Navigator.pop(context);
-                                          //edit
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  EditNoteScreen(
+                                                      currentNote: note),
+                                              fullscreenDialog: true,
+                                              allowSnapshotting: true,
+                                            ),
+                                          ).then((value) {
+                                            Navigator.pop(context, true);
+                                          });
                                         },
                                       ),
                                     ),

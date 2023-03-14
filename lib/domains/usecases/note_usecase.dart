@@ -24,6 +24,7 @@ class NoteUsecase {
 
     return List.generate(notes.length, (i) {
       return NoteEntitiy(
+        postNo: notes[i].postNo,
         topic: notes[i].topic,
         contents: notes[i].contents,
         dateTime: notes[i].issueDateTime,

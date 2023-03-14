@@ -23,6 +23,11 @@ class RemoteService extends BaseService {
   }
 
   @override
+  Future? updateNote(NoteModel note) {
+    return null;
+  }
+
+  @override
   Future<int> fetchTotalPostedCount(int userUid) async {
     return 0;
   }

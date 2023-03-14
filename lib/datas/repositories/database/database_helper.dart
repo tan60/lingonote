@@ -104,6 +104,7 @@ class DataBaseHelper {
 
     return List.generate(maps.length, (i) {
       return NoteModel(
+        postNo: maps[i]['post_no'],
         topic: maps[i]['post_topic'],
         contents: maps[i]['post_contents'],
         improved: maps[i]['post_improved'],
@@ -133,6 +134,7 @@ class DataBaseHelper {
 
     return List.generate(maps.length, (i) {
       return NoteModel(
+        postNo: maps[i]['post_no'],
         topic: maps[i]['post_topic'],
         contents: maps[i]['post_contents'],
         improved: maps[i]['post_improved'],
