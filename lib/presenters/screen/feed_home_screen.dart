@@ -202,7 +202,10 @@ class FeedHomeScreenState extends State<FeedHomeScreen> {
     await showDialog(
       context: context,
       builder: (context) {
-        return PreviewDialogWidget(note: note);
+        return PreviewDialogWidget(
+          note: note,
+          isEditable: true,
+        );
       },
     );
   }

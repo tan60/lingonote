@@ -10,8 +10,10 @@ import 'package:lingonote/presenters/widgets/rounded_icon_button_widget.dart';
 import 'package:sizer/sizer.dart';
 
 class EditNoteScreen extends StatefulWidget {
+  final NoteEntitiy? currentNote;
   const EditNoteScreen({
     super.key,
+    this.currentNote,
   });
 
   @override
@@ -248,7 +250,10 @@ class _EditNoteScreenState extends State<EditNoteScreen>
     await showDialog(
       context: context,
       builder: (context) {
-        return PreviewDialogWidget(note: note);
+        return PreviewDialogWidget(
+          note: note,
+          isEditable: false,
+        );
       },
     );
   }
