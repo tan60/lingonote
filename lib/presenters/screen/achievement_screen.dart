@@ -2,10 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:lingonote/datas/models/achieve_model.dart';
-import 'package:lingonote/datas/repositories/repo.dart';
-import 'package:lingonote/datas/repositories/local_service.dart';
-import 'package:lingonote/domains/managers/pref_mgr.dart';
+import 'package:lingonote/domains/entities/achieve_entity.dart';
 import 'package:lingonote/domains/managers/string_mgr.dart';
 import 'package:lingonote/domains/usecases/achieve_usecase.dart';
 import 'package:lingonote/presenters/screen/setting_screen.dart';
@@ -21,9 +18,7 @@ class AchievementScreen extends StatefulWidget {
 class _AchievementScreen extends State<AchievementScreen> {
   Future<int> totalCount = AchieveUsecase().fetchTotalPostedCount();
   Future<int> totalDays = AchieveUsecase().fetchTotalDays();
-
-  Future<List<AchieveModel>>? archives = Repo(LocalService())
-      .fetchAcheive(PrefMgr.prefs.getInt(PrefMgr.uid) ?? -1);
+  Future<List<AchieveEntity>>? achieves = AchieveUsecase().fetchAchieve();
 
   @override
   Widget build(BuildContext context) {
@@ -79,10 +74,6 @@ class _AchievementScreen extends State<AchievementScreen> {
                           fullscreenDialog: true,
                           allowSnapshotting: true,
                         ),
-                      ).then(
-                        (value) {
-                          //fetchNotes();
-                        },
                       );
                     },
                     child: Container(
@@ -144,12 +135,13 @@ class _AchievementScreen extends State<AchievementScreen> {
           Expanded(
             flex: 70,
             child: FutureBuilder(
-              future: archives,
+              future: achieves,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   log(snapshot.data!.toString());
                 }
-                return const CalendarUI();
+
+                return CalendarUI(achieves: snapshot.data);
               },
             ),
           ),
@@ -190,12 +182,16 @@ class EncourageWidget extends StatelessWidget {
 }
 
 class CalendarUI extends StatelessWidget {
-  const CalendarUI({super.key});
+  final List<AchieveEntity>? achieves;
+  const CalendarUI({
+    super.key,
+    required this.achieves,
+  });
 
   @override
   Widget build(BuildContext context) {
     DateTime nowDate = DateTime.now();
-    DateTime startDate = DateTime(2022, 12, 01);
+    DateTime startDate = DateTime(2023, 01, 01);
 
     String endDateWeekday = DateFormat('EEEE').format(startDate);
 
@@ -339,27 +335,50 @@ class CalendarUI extends StatelessWidget {
 
                         return Card(
                           margin: const EdgeInsets.all(6),
+                          elevation: 0,
                           color:
                               Theme.of(context).highlightColor.withOpacity(0.3),
                         );
                       } else {
-                        return Card(
-                          margin: const EdgeInsets.all(6),
-                          //color: Theme.of(context).primaryColor.withOpacity(0.7),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Theme.of(context)
-                                  .primaryColor
-                                  .withOpacity(0.6),
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(5)),
+                        return Builder(builder: (context) {
+                          DateTime dateTime = newList[newIndex];
+
+                          String dateTimeString =
+                              DateFormat('yyyy-MM-dd').format(dateTime);
+
+                          int postedCount = 0;
+
+                          if (achieves != null) {
+                            for (int i = 0; i < achieves!.length; i++) {
+                              if (achieves![i].date == dateTimeString) {
+                                postedCount = achieves![i].postedCount;
+                                break;
+                              }
+                            }
+                          }
+
+                          double opacity = 0.3 * postedCount;
+                          Color color;
+                          if (opacity > 0) {
+                            color = Theme.of(context)
+                                .primaryColor
+                                .withOpacity(opacity);
+                          } else {
+                            color = Theme.of(context).highlightColor;
+                          }
+
+                          return Card(
+                            margin: const EdgeInsets.all(4),
+                            elevation: 0,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: color,
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(6)),
+                              ),
                             ),
-                            child: Center(
-                              child: Text(
-                                  '${newList[newIndex].month}/${newList[newIndex].day}'),
-                            ),
-                          ),
-                        );
+                          );
+                        });
                       }
                     }),
               ),
