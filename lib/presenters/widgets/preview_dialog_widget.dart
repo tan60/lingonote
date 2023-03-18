@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:lingonote/domains/entities/note_entitiy.dart';
+import 'package:lingonote/domains/entities/note_entity.dart';
 import 'package:lingonote/domains/managers/string_mgr.dart';
+import 'package:lingonote/domains/usecases/preivew_usecase.dart';
 import 'package:lingonote/presenters/screen/edit_note_screen.dart';
 import 'package:sizer/sizer.dart';
 
@@ -11,7 +12,7 @@ enum ContentMode {
 }
 
 class PreviewDialogWidget extends StatefulWidget {
-  final NoteEntitiy note;
+  final NoteEntity note;
   final bool isEditable;
 
   const PreviewDialogWidget({
@@ -26,11 +27,48 @@ class PreviewDialogWidget extends StatefulWidget {
 
 class _PreviewDialogWidgetState extends State<PreviewDialogWidget> {
   ContentMode _contentMode = ContentMode.original;
+  String _content = "";
 
-  void changeContentMode(ContentMode mode) {
+  void _changeContentMode(ContentMode mode) async {
     setState(() {
       _contentMode = mode;
+
+      if (mode == ContentMode.original) {
+        _content = widget.note.contents;
+      } else {
+        if (widget.note.improvedType == 'grammary') {
+          _content = widget.note.improved;
+        } else {
+          _content = 'wating correct';
+          _queryCorrect();
+        }
+      }
     });
+  }
+
+  void _queryCorrect() async {
+    final NoteEntity correctedNote =
+        await PreviewUsecase().queryCorrectNote(widget.note);
+    String content = '';
+    if (correctedNote.improvedType == 'grammary') {
+      widget.note.improved = correctedNote.improved;
+      widget.note.improvedType = correctedNote.improvedType;
+      content = correctedNote.improved;
+
+      PreviewUsecase().updateNote(widget.note);
+    } else {
+      content = 'Sorry, try next time';
+    }
+
+    setState(() {
+      _content = content;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _changeContentMode(ContentMode.original);
   }
 
   @override
@@ -131,7 +169,7 @@ class _PreviewDialogWidgetState extends State<PreviewDialogWidget> {
                                   .displayLarge!
                                   .color!,
                               onTap: () {
-                                changeContentMode(ContentMode.original);
+                                _changeContentMode(ContentMode.original);
                               },
                               isSelected: _contentMode == ContentMode.original,
                             ),
@@ -142,7 +180,7 @@ class _PreviewDialogWidgetState extends State<PreviewDialogWidget> {
                               text: StringMgr().correctedByAI,
                               color: Theme.of(context).primaryColor,
                               onTap: () {
-                                changeContentMode(ContentMode.improved);
+                                _changeContentMode(ContentMode.improved);
                               },
                               isSelected: _contentMode == ContentMode.improved,
                             ),
@@ -166,24 +204,20 @@ class _PreviewDialogWidgetState extends State<PreviewDialogWidget> {
                     Expanded(
                       child: SizedBox(
                         width: double.infinity,
-                        child: Expanded(
-                          child: Scrollbar(
-                            thumbVisibility: false,
-                            thickness: 3,
-                            radius: const Radius.circular(20),
-                            child: SingleChildScrollView(
-                              child: Expanded(
-                                child: Text(
-                                  widget.note.contents,
-                                  style: TextStyle(
-                                      fontSize: 18.sp,
-                                      fontWeight: FontWeight.w300,
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .displayLarge
-                                          ?.color),
-                                ),
-                              ),
+                        child: Scrollbar(
+                          thumbVisibility: false,
+                          thickness: 3,
+                          radius: const Radius.circular(20),
+                          child: SingleChildScrollView(
+                            child: Text(
+                              _content,
+                              style: TextStyle(
+                                  fontSize: 18.sp,
+                                  fontWeight: FontWeight.w300,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .displayLarge
+                                      ?.color),
                             ),
                           ),
                         ),
@@ -208,6 +242,7 @@ class _PreviewDialogWidgetState extends State<PreviewDialogWidget> {
                           iconSize: 22,
                           onPressed: () {
                             //show delete popup
+                            _showDeleteDialog();
                           },
                         ),
                       ),
@@ -219,7 +254,7 @@ class _PreviewDialogWidgetState extends State<PreviewDialogWidget> {
                           color: Theme.of(context).focusColor,
                           iconSize: 32,
                           onPressed: () {
-                            Navigator.pop(context);
+                            Navigator.pop(context, true);
                           },
                         ),
                       ),
@@ -231,6 +266,42 @@ class _PreviewDialogWidgetState extends State<PreviewDialogWidget> {
           ),
         ],
       ),
+    );
+  }
+
+  Future<void> _showDeleteDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0), // 원하는 radius 값으로 변경 가능
+          ),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                  'Do you really want to delete it?',
+                  style: TextStyle(
+                    color: Theme.of(context).textTheme.displayLarge!.color!,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'Cancel'),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'OK'),
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

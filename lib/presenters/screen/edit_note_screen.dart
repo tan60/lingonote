@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:lingonote/domains/entities/note_entitiy.dart';
+import 'package:lingonote/domains/entities/note_entity.dart';
 import 'package:lingonote/domains/managers/pref_mgr.dart';
 import 'package:lingonote/domains/managers/string_mgr.dart';
 import 'package:lingonote/domains/usecases/edit_usecase.dart';
@@ -10,7 +10,7 @@ import 'package:lingonote/presenters/widgets/rounded_icon_button_widget.dart';
 import 'package:sizer/sizer.dart';
 
 class EditNoteScreen extends StatefulWidget {
-  final NoteEntitiy? currentNote;
+  final NoteEntity? currentNote;
   const EditNoteScreen({
     super.key,
     this.currentNote,
@@ -85,7 +85,7 @@ class _EditNoteScreenState extends State<EditNoteScreen>
     });
   }
 
-  void _showPostingResultAndPop(NoteEntitiy? note) {
+  void _showPostingResultAndPop(NoteEntity? note) {
     _setPostingState(false);
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
       content: Text('작성 완료! AI로 향상된 표현을 배워보세요.'),
@@ -233,7 +233,7 @@ class _EditNoteScreenState extends State<EditNoteScreen>
     );
   }
 
-  NoteEntitiy _buildNote() {
+  NoteEntity _buildNote() {
     int? postNo = widget.currentNote?.postNo;
     String topic = _topicTextEditingController.text;
     String contents = _contentsTextEditingController.text;
@@ -242,7 +242,7 @@ class _EditNoteScreenState extends State<EditNoteScreen>
     var now = DateTime.now();
     String issueDateTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
 
-    return NoteEntitiy(
+    return NoteEntity(
       postNo: postNo,
       topic: topic,
       contents: contents,
@@ -252,11 +252,11 @@ class _EditNoteScreenState extends State<EditNoteScreen>
     );
   }
 
-  Future<NoteEntitiy>? _postNote(BuildContext context, NoteEntitiy note) async {
+  Future<NoteEntity>? _postNote(BuildContext context, NoteEntity note) async {
     return await EditUsecase().postOrUpdateNote(note);
   }
 
-  Future<void> _showPreviewDialog(NoteEntitiy note) async {
+  Future<void> _showPreviewDialog(NoteEntity note) async {
     await showDialog(
       context: context,
       builder: (context) {

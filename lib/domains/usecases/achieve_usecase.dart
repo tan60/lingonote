@@ -3,7 +3,7 @@ import 'package:lingonote/datas/models/note_model.dart';
 import 'package:lingonote/datas/repositories/base_service.dart';
 import 'package:lingonote/datas/repositories/local_service.dart';
 import 'package:lingonote/domains/entities/achieve_entity.dart';
-import 'package:lingonote/domains/entities/note_entitiy.dart';
+import 'package:lingonote/domains/entities/note_entity.dart';
 import 'package:lingonote/domains/managers/pref_mgr.dart';
 
 class AchieveUsecase {
@@ -27,10 +27,10 @@ class AchieveUsecase {
     return await service.fetchTotalPostedCount(userUid);
   }
 
-  Future<NoteEntitiy>? fetchFirstNote() async {
+  Future<NoteEntity>? fetchFirstNote() async {
     NoteModel note = await service.fetchFirstNote(userUid)!;
 
-    return NoteEntitiy(
+    return NoteEntity(
       postNo: note.postNo,
       topic: note.topic,
       contents: note.contents,

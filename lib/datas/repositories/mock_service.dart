@@ -1,5 +1,6 @@
 import 'package:lingonote/datas/models/achieve_model.dart';
 import 'package:lingonote/datas/models/note_model.dart';
+import 'package:lingonote/datas/models/query_ai_model.dart';
 import 'package:lingonote/datas/repositories/base_service.dart';
 
 class MockService extends BaseService {
@@ -60,6 +61,11 @@ class MockService extends BaseService {
 
   @override
   Future<List<AchieveModel>>? fetchAcheive(int userUid) {
+    return null;
+  }
+
+  @override
+  Future<dynamic>? postCorrectQuery(QueryAIModel queryAIModel) {
     return null;
   }
 }

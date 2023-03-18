@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:lingonote/domains/entities/note_entitiy.dart';
+import 'package:lingonote/domains/entities/note_entity.dart';
 import 'package:lingonote/domains/managers/string_mgr.dart';
 import 'package:lingonote/domains/usecases/note_usecase.dart';
 import 'package:lingonote/presenters/screen/edit_note_screen.dart';
@@ -17,7 +17,7 @@ class FeedHomeScreen extends StatefulWidget {
 }
 
 class FeedHomeScreenState extends State<FeedHomeScreen> {
-  Future<List<NoteEntitiy>>? notes = NoteUsecase().fetchMyNotes();
+  Future<List<NoteEntity>>? notes = NoteUsecase().fetchMyNotes();
 
   void fetchNotes() {
     setState(() {
@@ -58,7 +58,7 @@ class FeedHomeScreenState extends State<FeedHomeScreen> {
     );
   }
 
-  ListView buildNoteList(AsyncSnapshot<List<NoteEntitiy>> snapshot) {
+  ListView buildNoteList(AsyncSnapshot<List<NoteEntity>> snapshot) {
     return ListView.separated(
       scrollDirection: Axis.vertical,
       itemCount: snapshot.data!.length,
@@ -198,7 +198,7 @@ class FeedHomeScreenState extends State<FeedHomeScreen> {
     );
   }
 
-  Future<void> _showPreviewDialog(NoteEntitiy note) async {
+  Future<void> _showPreviewDialog(NoteEntity note) async {
     final result = await showDialog(
       context: context,
       builder: (context) {

@@ -1,5 +1,6 @@
 import 'package:lingonote/datas/models/achieve_model.dart';
 import 'package:lingonote/datas/models/note_model.dart';
+import 'package:lingonote/datas/models/query_ai_model.dart';
 import 'package:lingonote/datas/repositories/base_service.dart';
 import 'package:lingonote/datas/repositories/database/database_helper.dart';
 
@@ -41,5 +42,10 @@ class LocalService extends BaseService {
   @override
   Future<List<AchieveModel>>? fetchAcheive(int userUid) {
     return DataBaseHelper().getArchive(userUid);
+  }
+
+  @override
+  Future<dynamic>? postCorrectQuery(QueryAIModel queryAIModel) {
+    return null;
   }
 }

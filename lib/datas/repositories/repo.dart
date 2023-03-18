@@ -1,5 +1,6 @@
 import 'package:lingonote/datas/models/achieve_model.dart';
 import 'package:lingonote/datas/models/note_model.dart';
+import 'package:lingonote/datas/models/query_ai_model.dart';
 import 'package:lingonote/datas/repositories/base_service.dart';
 
 class Repo extends BaseService {
@@ -45,5 +46,10 @@ class Repo extends BaseService {
   @override
   Future<List<AchieveModel>>? fetchAcheive(int userUid) async {
     return await service.fetchAcheive(userUid)!;
+  }
+
+  @override
+  Future? postCorrectQuery(QueryAIModel queryAIModel) async {
+    return await service.postCorrectQuery(queryAIModel);
   }
 }
