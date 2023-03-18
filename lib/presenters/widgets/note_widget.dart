@@ -72,7 +72,7 @@ class Note extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                improvedType != 'test'
+                improvedType != 'none'
                     ? Text(
                         StringMgr().correctedByAI,
                         style: TextStyle(

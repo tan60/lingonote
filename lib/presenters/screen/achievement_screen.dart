@@ -348,14 +348,11 @@ class CalendarUI extends StatelessWidget {
 
                           int postedCount = 0;
 
-                          if (achieves != null) {
-                            for (int i = 0; i < achieves!.length; i++) {
-                              if (achieves![i].date == dateTimeString) {
-                                postedCount = achieves![i].postedCount;
-                                break;
-                              }
+                          achieves?.forEach((a) {
+                            if (a.date == dateTimeString) {
+                              postedCount = a.postedCount;
                             }
-                          }
+                          });
 
                           double opacity = 0.3 * postedCount;
                           Color color;

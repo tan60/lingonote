@@ -5,9 +5,15 @@ import 'package:lingonote/domains/managers/string_mgr.dart';
 import 'package:lingonote/presenters/screen/edit_note_screen.dart';
 import 'package:sizer/sizer.dart';
 
-class PreviewDialogWidget extends StatelessWidget {
+enum ContentMode {
+  original,
+  improved,
+}
+
+class PreviewDialogWidget extends StatefulWidget {
   final NoteEntitiy note;
   final bool isEditable;
+
   const PreviewDialogWidget({
     super.key,
     required this.note,
@@ -15,10 +21,22 @@ class PreviewDialogWidget extends StatelessWidget {
   });
 
   @override
+  State<PreviewDialogWidget> createState() => _PreviewDialogWidgetState();
+}
+
+class _PreviewDialogWidgetState extends State<PreviewDialogWidget> {
+  ContentMode _contentMode = ContentMode.original;
+
+  void changeContentMode(ContentMode mode) {
+    setState(() {
+      _contentMode = mode;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    DateTime issueServerTime = DateTime.parse(note.dateTime);
+    DateTime issueServerTime = DateTime.parse(widget.note.dateTime);
     String formattedTime = DateFormat('yyyy.MM.dd').format(issueServerTime);
-    bool isCorrected = note.improvedType == "none";
 
     return Dialog(
       backgroundColor: Colors.transparent,
@@ -38,20 +56,20 @@ class PreviewDialogWidget extends StatelessWidget {
                 height: 850,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
-                    color: Theme.of(context).dialogBackgroundColor),
+                    color: Theme.of(context).scaffoldBackgroundColor),
                 padding: const EdgeInsets.fromLTRB(15, 15, 15, 50),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Builder(
                       builder: (context) {
-                        return isEditable
+                        return widget.isEditable
                             ? Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8),
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 0, 8, 0),
                                     child: SizedBox(
                                       width: 32,
                                       height: 32,
@@ -66,12 +84,12 @@ class PreviewDialogWidget extends StatelessWidget {
                                             MaterialPageRoute(
                                               builder: (context) =>
                                                   EditNoteScreen(
-                                                      currentNote: note),
+                                                      currentNote: widget.note),
                                               fullscreenDialog: true,
                                               allowSnapshotting: true,
                                             ),
                                           ).then((value) {
-                                            Navigator.pop(context, true);
+                                            //Navigator.pop(context, true);
                                           });
                                         },
                                       ),
@@ -88,7 +106,7 @@ class PreviewDialogWidget extends StatelessWidget {
                     SizedBox(
                       width: double.infinity,
                       child: Text(
-                        note.topic,
+                        widget.note.topic,
                         style: TextStyle(
                             fontSize: 22.sp,
                             fontWeight: FontWeight.w500,
@@ -104,20 +122,41 @@ class PreviewDialogWidget extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          isCorrected ? StringMgr().showCorrectedNote : "",
-                          style: TextStyle(
-                            fontSize: 10.sp,
-                            color: isCorrected
-                                ? Theme.of(context).primaryColor
-                                : Theme.of(context).disabledColor,
-                          ),
+                        Row(
+                          children: [
+                            PreviewFlatButton(
+                              text: StringMgr().showOriginalNote,
+                              color: Theme.of(context)
+                                  .textTheme
+                                  .displayLarge!
+                                  .color!,
+                              onTap: () {
+                                changeContentMode(ContentMode.original);
+                              },
+                              isSelected: _contentMode == ContentMode.original,
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            PreviewFlatButton(
+                              text: StringMgr().correctedByAI,
+                              color: Theme.of(context).primaryColor,
+                              onTap: () {
+                                changeContentMode(ContentMode.improved);
+                              },
+                              isSelected: _contentMode == ContentMode.improved,
+                            ),
+                          ],
                         ),
                         Text(
                           formattedTime,
                           style: TextStyle(
                               fontSize: 10.sp,
-                              color: Theme.of(context).disabledColor),
+                              fontWeight: FontWeight.w300,
+                              color: Theme.of(context)
+                                  .textTheme
+                                  .displayLarge!
+                                  .color!),
                         ),
                       ],
                     ),
@@ -135,7 +174,7 @@ class PreviewDialogWidget extends StatelessWidget {
                             child: SingleChildScrollView(
                               child: Expanded(
                                 child: Text(
-                                  note.contents,
+                                  widget.note.contents,
                                   style: TextStyle(
                                       fontSize: 18.sp,
                                       fontWeight: FontWeight.w300,
@@ -156,24 +195,99 @@ class PreviewDialogWidget extends StatelessWidget {
               Container(
                 alignment: Alignment.bottomRight,
                 child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: SizedBox(
-                    width: 32,
-                    height: 32,
-                    child: IconButton(
-                      icon: const Icon(Icons.keyboard_arrow_down_outlined),
-                      color: Theme.of(context).focusColor,
-                      iconSize: 32,
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
+                  padding: const EdgeInsets.fromLTRB(10, 20, 20, 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        width: 22,
+                        height: 22,
+                        child: IconButton(
+                          icon: const Icon(Icons.delete),
+                          color: Theme.of(context).focusColor,
+                          iconSize: 22,
+                          onPressed: () {
+                            //show delete popup
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                        width: 32,
+                        height: 32,
+                        child: IconButton(
+                          icon: const Icon(Icons.keyboard_arrow_down_outlined),
+                          color: Theme.of(context).focusColor,
+                          iconSize: 32,
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+class PreviewFlatButton extends StatefulWidget {
+  final String text;
+  final Color color;
+  final Function()? onTap;
+  final bool isSelected;
+
+  const PreviewFlatButton({
+    super.key,
+    required this.text,
+    required this.color,
+    required this.onTap,
+    required this.isSelected,
+  });
+
+  @override
+  State<PreviewFlatButton> createState() => _PreviewFlatButtonState();
+}
+
+class _PreviewFlatButtonState extends State<PreviewFlatButton> {
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Theme.of(context).scaffoldBackgroundColor,
+      child: InkWell(
+        onTap: widget.isSelected ? null : widget.onTap,
+        child: SizedBox(
+          height: 20,
+          child: Row(
+            children: [
+              Icon(
+                Icons.check_circle_outline_sharp,
+                color: widget.isSelected
+                    ? Colors.green
+                    : Theme.of(context).highlightColor,
+                size: 15,
+              ),
+              const SizedBox(
+                width: 3,
+              ),
+              Text(
+                widget.text,
+                style: TextStyle(
+                  fontSize: 10.sp,
+                  color: widget.color,
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
+              const SizedBox(
+                width: 5,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
