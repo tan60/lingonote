@@ -8,6 +8,7 @@ class OpenAIMgr {
   OpenAIMgr._internal();
 
   final String model = 'text-davinci-edit-001';
-  final String instruction = 'correct grammary and sepelling only.';
+  final String instruction =
+      'correct and improve only grammary.'; //correct grammary and sepelling only.';
   final String apiKey = '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';
 }

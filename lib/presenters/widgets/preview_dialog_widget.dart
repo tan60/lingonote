@@ -28,6 +28,7 @@ class PreviewDialogWidget extends StatefulWidget {
 class _PreviewDialogWidgetState extends State<PreviewDialogWidget> {
   ContentMode _contentMode = ContentMode.original;
   String _content = "";
+  bool isShowRefreshButton = false;
 
   void _changeContentMode(ContentMode mode) async {
     setState(() {
@@ -36,10 +37,11 @@ class _PreviewDialogWidgetState extends State<PreviewDialogWidget> {
       if (mode == ContentMode.original) {
         _content = widget.note.contents;
       } else {
-        if (widget.note.improvedType == 'grammary') {
+        /* if (widget.note.improvedType == 'grammary') {
           _content = widget.note.improved;
-        } else {
-          _content = 'wating correct';
+        } else */
+        {
+          _content = 'Please wating for response from ChatGPT.';
           _queryCorrect();
         }
       }
@@ -172,17 +174,24 @@ class _PreviewDialogWidgetState extends State<PreviewDialogWidget> {
                                 _changeContentMode(ContentMode.original);
                               },
                               isSelected: _contentMode == ContentMode.original,
+                              enableRetry: false,
                             ),
                             const SizedBox(
                               width: 10,
                             ),
-                            PreviewFlatButton(
-                              text: StringMgr().correctedByAI,
-                              color: Theme.of(context).primaryColor,
-                              onTap: () {
-                                _changeContentMode(ContentMode.improved);
-                              },
-                              isSelected: _contentMode == ContentMode.improved,
+                            Row(
+                              children: [
+                                PreviewFlatButton(
+                                  text: StringMgr().correctedByAI,
+                                  color: Theme.of(context).primaryColor,
+                                  onTap: () {
+                                    _changeContentMode(ContentMode.improved);
+                                  },
+                                  isSelected:
+                                      _contentMode == ContentMode.improved,
+                                  enableRetry: true,
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -241,7 +250,6 @@ class _PreviewDialogWidgetState extends State<PreviewDialogWidget> {
                           color: Theme.of(context).focusColor,
                           iconSize: 22,
                           onPressed: () {
-                            //show delete popup
                             _showDeleteDialog();
                           },
                         ),
@@ -311,6 +319,7 @@ class PreviewFlatButton extends StatefulWidget {
   final Color color;
   final Function()? onTap;
   final bool isSelected;
+  final bool enableRetry;
 
   const PreviewFlatButton({
     super.key,
@@ -318,6 +327,7 @@ class PreviewFlatButton extends StatefulWidget {
     required this.color,
     required this.onTap,
     required this.isSelected,
+    required this.enableRetry,
   });
 
   @override
@@ -325,14 +335,16 @@ class PreviewFlatButton extends StatefulWidget {
 }
 
 class _PreviewFlatButtonState extends State<PreviewFlatButton> {
+  final bool _isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return Material(
       color: Theme.of(context).scaffoldBackgroundColor,
       child: InkWell(
-        onTap: widget.isSelected ? null : widget.onTap,
+        onTap: widget.isSelected && !widget.enableRetry ? null : widget.onTap,
         child: SizedBox(
-          height: 20,
+          height: 30,
           child: Row(
             children: [
               Icon(
@@ -340,7 +352,7 @@ class _PreviewFlatButtonState extends State<PreviewFlatButton> {
                 color: widget.isSelected
                     ? Colors.green
                     : Theme.of(context).highlightColor,
-                size: 15,
+                size: 20,
               ),
               const SizedBox(
                 width: 3,
@@ -348,14 +360,27 @@ class _PreviewFlatButtonState extends State<PreviewFlatButton> {
               Text(
                 widget.text,
                 style: TextStyle(
-                  fontSize: 10.sp,
+                  fontSize: 11.sp,
                   color: widget.color,
                   fontWeight: FontWeight.w300,
                 ),
               ),
               const SizedBox(
-                width: 5,
+                width: 3,
               ),
+              Builder(builder: (context) {
+                if (widget.enableRetry) {
+                  return Icon(
+                    Icons.refresh_outlined,
+                    color: widget.isSelected
+                        ? Theme.of(context).primaryColor
+                        : Theme.of(context).highlightColor,
+                    size: 20,
+                  );
+                } else {
+                  return Container();
+                }
+              })
             ],
           ),
         ),
